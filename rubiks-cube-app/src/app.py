@@ -20,14 +20,25 @@ def rotate_cube():
     cube.rotate(axis, direction)
     return jsonify(success=True)
 
-@app.route('/cube/mix', methods=['POST'])
-def mix_cube():
-    data = request.get_json()
-    if not data or 'moves' not in data:
-        return jsonify({"error": "Invalid request"}), 400
-    moves = data['moves']
-    cube.mix(moves)
-    return jsonify(success=True)
+@app.route('/cube/key-press', methods=['POST'])
+def handle_key_press():
+    try:
+        data = request.get_json()
+        key = data.get('key')
+        print(f"Received key: {key}")  # Debugging
+
+        axis, direction = cube.get_axis_and_direction(key)
+        print(f"Mapped to axis: {axis}, direction: {direction}")  # Debugging
+
+        cube.rotate(axis, direction)
+        return jsonify(success=True)
+    except ValueError as ve:
+        print(f"ValueError: {ve}")
+        return jsonify({"error": str(ve)}), 400  # Bad Request for invalid keys
+    except Exception as e:
+        print(f"Error processing key press: {e}")
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)

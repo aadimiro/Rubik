@@ -1,67 +1,72 @@
-// Updated cube.js
-
-// Removed 2D Canvas Logic
-
 class Cube {
     constructor() {
-        this.state = this.createSolvedState();
+        this.state = null;
+        this.orientation = { x: 0, y: 0, z: 0 }; // Orientation in degrees
     }
 
-    createSolvedState() {
-        // Initialize the cube with a solved state
-        return [
-            Array(9).fill('W'),  // White
-            Array(9).fill('R'),  // Red
-            Array(9).fill('B'),  // Blue
-            Array(9).fill('O'),  // Orange
-            Array(9).fill('G'),  // Green
-            Array(9).fill('Y')   // Yellow
-        ];
+    async fetchState() {
+        const response = await fetch('/cube/state');
+        const data = await response.json();
+        this.state = data.state;
+        this.orientation = data.orientation;
+        this.render();
     }
 
-    rotate(axis, direction) {
-        // Implement the logic to rotate the specified face
+    async sendKeyPress(key) {
+        await fetch('/cube/key-press', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key })
+        });
+        await this.fetchState(); // Fetch updated state
     }
 
-    mix(moves) {
-        // Implement the logic to mix the cube
+    render() {
+        const colorMap = {
+            W: 0xffffff, // White
+            Y: 0xffff00, // Yellow
+            B: 0x0000ff, // Blue
+            G: 0x00ff00, // Green
+            O: 0xffa500, // Orange
+            R: 0xff0000  // Red
+        };
+
+        rubiksCube.children.forEach((cubie, index) => {
+            const faceColors = this.getFaceColors(index);
+            cubie.material.forEach((material, i) => {
+                material.color.setHex(colorMap[faceColors[i]]);
+            });
+        });
+
+        rubiksCube.rotation.x = THREE.Math.degToRad(this.orientation.x);
+        rubiksCube.rotation.y = THREE.Math.degToRad(this.orientation.y);
+        rubiksCube.rotation.z = THREE.Math.degToRad(this.orientation.z);
+    }
+
+    getFaceColors(cubieIndex) {
+        // Return the colors for the faces of a given cubie (logic depends on your cube mapping)
+        return ['W', 'Y', 'B', 'G', 'O', 'R']; // Example order
     }
 }
 
-// Three.js Rendering Logic
 const threeCanvas = document.getElementById('cubeCanvas');
 const renderer = new THREE.WebGLRenderer({ canvas: threeCanvas });
-renderer.setSize(threeCanvas.clientWidth, threeCanvas.clientHeight); // Match canvas size
-renderer.setPixelRatio(window.devicePixelRatio); // For sharper rendering
+renderer.setSize(threeCanvas.clientWidth, threeCanvas.clientHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, threeCanvas.clientWidth / threeCanvas.clientHeight, 0.1, 1000);
-camera.position.z = 5;
+camera.position.set(3, 3, 3);
+camera.lookAt(0, 0, 0);
 
-// Rubik's Cube Geometry and Materials
 const cubieSize = 0.9;
-const colors = {
-    W: 0xffffff,
-    R: 0xff0000,
-    B: 0x0000ff,
-    O: 0xffa500,
-    G: 0x00ff00,
-    Y: 0xffff00
-};
-
 const rubiksCube = new THREE.Group();
+
 for (let x = -1; x <= 1; x++) {
     for (let y = -1; y <= 1; y++) {
         for (let z = -1; z <= 1; z++) {
             const geometry = new THREE.BoxGeometry(cubieSize, cubieSize, cubieSize);
-            const materials = [
-                new THREE.MeshBasicMaterial({ color: colors.W }),
-                new THREE.MeshBasicMaterial({ color: colors.Y }),
-                new THREE.MeshBasicMaterial({ color: colors.R }),
-                new THREE.MeshBasicMaterial({ color: colors.O }),
-                new THREE.MeshBasicMaterial({ color: colors.B }),
-                new THREE.MeshBasicMaterial({ color: colors.G })
-            ];
+            const materials = Array(6).fill().map(() => new THREE.MeshBasicMaterial({ color: 0x000000 }));
             const cubie = new THREE.Mesh(geometry, materials);
             cubie.position.set(x, y, z);
             rubiksCube.add(cubie);
@@ -76,27 +81,9 @@ function animate() {
 }
 animate();
 
-// Event listeners for manual rotation
+const cube = new Cube();
+cube.fetchState();
+
 document.addEventListener('keydown', (event) => {
-    const key = event.key;
-    switch (key) {
-        case 'ArrowUp':
-            rubiksCube.rotation.x -= 0.1;
-            break;
-        case 'ArrowDown':
-            rubiksCube.rotation.x += 0.1;
-            break;
-        case 'ArrowLeft':
-            rubiksCube.rotation.y -= 0.1;
-            break;
-        case 'ArrowRight':
-            rubiksCube.rotation.y += 0.1;
-            break;
-        case 'q':
-            rubiksCube.rotation.z -= 0.1;
-            break;
-        case 'e':
-            rubiksCube.rotation.z += 0.1;
-            break;
-    }
+    cube.sendKeyPress(event.key);
 });
