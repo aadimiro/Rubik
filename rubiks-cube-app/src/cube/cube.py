@@ -13,8 +13,8 @@ class Cube:
             'U': ['W'] * 9,  # White (Upper face)
             'D': ['Y'] * 9,  # Yellow (Down face)
             'F': ['R'] * 9,  # Blue (Front face)
-            'B': ['G'] * 9,  # Green (Back face)
-            'L': ['O'] * 9,  # Orange (Left face)
+            'B': ['O'] * 9,  # Green (Back face)
+            'L': ['G'] * 9,  # Orange (Left face)
             'R': ['B'] * 9   # Red (Right face)
         }
     
