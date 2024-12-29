@@ -86,7 +86,8 @@ class Cube:
         logging.debug(f"Rotation matrix for axis {axis} and angle {angle}:\n{rotation_mat}")
 
         # Update the orientation matrix
-        self.orientation_matrix = np.dot(rotation_mat, self.orientation_matrix)
+        #self.orientation_matrix = np.dot(rotation_mat, self.orientation_matrix)
+        self.orientation_matrix = np.dot(self.orientation_matrix,rotation_mat)
 
         logging.debug(f"Orientation matrix after:\n{self.orientation_matrix}")
 
