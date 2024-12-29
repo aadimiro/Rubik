@@ -30,7 +30,8 @@ class Cube {
             B: 0x0000ff, // Blue
             G: 0x00ff00, // Green
             O: 0xffa500, // Orange
-            R: 0xff0000  // Red
+            R: 0xff0000,  // Red
+            black: 0x000000
         };
 
         // Update the cube faces with the correct colors
@@ -82,9 +83,174 @@ class Cube {
     }
 
     getFaceColors(cubieIndex) {
-        // Return the colors for the faces of a given cubie (this depends on your cube mapping)
-        return ['W', 'Y', 'B', 'G', 'O', 'R']; // Example order
-    }
+        const faceColors = ['W', 'Y', 'B', 'G', 'O', 'R'];
+        if (cubieIndex === 26) {
+            faceColors[1] = "black";
+            faceColors[3] = "black";
+            faceColors[5] = "black";
+        }
+        if (cubieIndex === 25) {
+            faceColors[1] = "black";
+            faceColors[3] = "black";
+            faceColors[4] = "black";
+            faceColors[5] = "black";            
+        }
+        if (cubieIndex === 24) {
+            faceColors[1] = "black";
+            faceColors[3] = "black";
+            faceColors[4] = "black";
+        }
+        if (cubieIndex === 23) {
+            faceColors[1] = "black";
+            faceColors[2] = "black";
+            faceColors[3] = "black";
+            faceColors[5] = "black";                
+        }
+        if (cubieIndex === 22) {
+            faceColors[1] = "black";
+            faceColors[2] = "black";
+            faceColors[3] = "black";
+            faceColors[4] = "black";    
+            faceColors[5] = "black";
+        }
+        if (cubieIndex === 21) {
+            faceColors[1] = "black";
+            faceColors[2] = "black";
+            faceColors[3] = "black";
+            faceColors[4] = "black";    
+        }        
+        if (cubieIndex === 20) {
+            faceColors[1] = "black";
+            faceColors[5] = "black";
+            faceColors[2] = "black";
+        }
+        if (cubieIndex === 19) {
+            faceColors[1] = "black";
+            faceColors[2] = "black";
+            faceColors[4] = "black";
+            faceColors[5] = "black";
+        }
+        if (cubieIndex === 18) {
+            faceColors[1] = "black";
+            faceColors[2] = "black";
+            faceColors[4] = "black";
+
+        }
+        if (cubieIndex === 17) {
+            faceColors[0] = "black";
+            faceColors[1] = "black";
+            faceColors[3] = "black";
+            faceColors[5] = "black";
+        }
+        if (cubieIndex === 16) {
+            faceColors[0] = "black";
+            faceColors[1] = "black";
+            faceColors[3] = "black";
+            faceColors[4] = "black";
+            faceColors[5] = "black";
+        }
+        if (cubieIndex === 15) {
+            faceColors[0] = "black";
+            faceColors[1] = "black";
+            faceColors[3] = "black";
+            faceColors[4] = "black";
+        }
+        if (cubieIndex === 14) {
+            faceColors[0] = "black";
+            faceColors[1] = "black";
+            faceColors[2] = "black";
+            faceColors[3] = "black";
+            faceColors[5] = "black";
+        }
+        if (cubieIndex === 13) {
+            faceColors[0] = "black";
+            faceColors[1] = "black";
+            faceColors[2] = "black";
+            faceColors[4] = "black";
+            faceColors[3] = "black";
+            faceColors[5] = "black";
+        }
+        if (cubieIndex === 12) {
+            faceColors[0] = "black";
+            faceColors[1] = "black";
+            faceColors[2] = "black";
+            faceColors[4] = "black";
+            faceColors[3] = "black";
+        }
+        if (cubieIndex === 11) {
+            faceColors[0] = "black";
+            faceColors[1] = "black";
+            faceColors[2] = "black";
+            faceColors[5] = "black";
+        }
+        if (cubieIndex === 10) {
+            faceColors[0] = "black";
+            faceColors[1] = "black";
+            faceColors[2] = "black";
+            faceColors[4] = "black";
+            faceColors[5] = "black";
+        }
+        if (cubieIndex === 9) {
+            faceColors[0] = "black";
+            faceColors[1] = "black";
+            faceColors[2] = "black";
+            faceColors[4] = "black";
+        }
+        if (cubieIndex === 8) {
+            faceColors[0] = "black";
+            faceColors[3] = "black";
+            faceColors[5] = "black";
+        }
+        if (cubieIndex === 7) {
+            faceColors[0] = "black";
+            faceColors[3] = "black";
+            faceColors[4] = "black";
+            faceColors[5] = "black";
+        }
+        if (cubieIndex === 6) {
+            faceColors[0] = "black";
+            faceColors[3] = "black";
+            faceColors[4] = "black";
+        }
+        if (cubieIndex === 5) {
+            faceColors[0] = "black";
+            faceColors[2] = "black";
+            faceColors[3] = "black";
+            faceColors[5] = "black";
+        }
+        if (cubieIndex === 4) {
+            faceColors[0] = "black";
+            faceColors[2] = "black";
+            faceColors[3] = "black";
+            faceColors[4] = "black";
+            faceColors[5] = "black";
+        }
+        if (cubieIndex === 3) {
+            faceColors[0] = "black";
+            faceColors[2] = "black";
+            faceColors[3] = "black";
+            faceColors[4] = "black";
+        }
+        if (cubieIndex === 2) {
+            faceColors[0] = "black";
+            faceColors[2] = "black";
+            faceColors[5] = "black";
+        }
+        if (cubieIndex === 1) {
+            faceColors[0] = "black";
+            faceColors[2] = "black";
+            faceColors[4] = "black";
+            faceColors[5] = "black";
+        }
+        if (cubieIndex === 0) {
+            faceColors[0] = "black";
+            faceColors[2] = "black";
+            faceColors[4] = "black";
+        }
+        return faceColors;
+    }    
+  
+   
 }
 
 const threeCanvas = document.getElementById('cubeCanvas');
