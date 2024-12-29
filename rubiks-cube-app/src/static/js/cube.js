@@ -84,172 +84,45 @@ class Cube {
 
     getFaceColors(cubieIndex) {
         const faceColors = ['W', 'Y', 'B', 'G', 'O', 'R'];
-        if (cubieIndex === 26) {
-            faceColors[1] = "black";
-            faceColors[3] = "black";
-            faceColors[5] = "black";
-        }
-        if (cubieIndex === 25) {
-            faceColors[1] = "black";
-            faceColors[3] = "black";
-            faceColors[4] = "black";
-            faceColors[5] = "black";            
-        }
-        if (cubieIndex === 24) {
-            faceColors[1] = "black";
-            faceColors[3] = "black";
-            faceColors[4] = "black";
-        }
-        if (cubieIndex === 23) {
-            faceColors[1] = "black";
-            faceColors[2] = "black";
-            faceColors[3] = "black";
-            faceColors[5] = "black";                
-        }
-        if (cubieIndex === 22) {
-            faceColors[1] = "black";
-            faceColors[2] = "black";
-            faceColors[3] = "black";
-            faceColors[4] = "black";    
-            faceColors[5] = "black";
-        }
-        if (cubieIndex === 21) {
-            faceColors[1] = "black";
-            faceColors[2] = "black";
-            faceColors[3] = "black";
-            faceColors[4] = "black";    
-        }        
-        if (cubieIndex === 20) {
-            faceColors[1] = "black";
-            faceColors[5] = "black";
-            faceColors[2] = "black";
-        }
-        if (cubieIndex === 19) {
-            faceColors[1] = "black";
-            faceColors[2] = "black";
-            faceColors[4] = "black";
-            faceColors[5] = "black";
-        }
-        if (cubieIndex === 18) {
-            faceColors[1] = "black";
-            faceColors[2] = "black";
-            faceColors[4] = "black";
+        const blackFaces = {
+            0: [0, 2, 4],
+            1: [0, 2, 4, 5],
+            2: [0, 2, 5],
+            3: [0, 2, 3, 4],
+            4: [0, 2, 3, 4, 5],
+            5: [0, 2, 3, 5],
+            6: [0, 3, 4],
+            7: [0, 3, 4, 5],
+            8: [0, 3, 5],
+            9: [0, 1, 2, 4],
+            10: [0, 1, 2, 4, 5],
+            11: [0, 1, 2, 5],
+            12: [0, 1, 2, 3, 4],
+            13: [0, 1, 2, 3, 4, 5],
+            14: [0, 1, 2, 3, 5],
+            15: [0, 1, 3, 4],
+            16: [0, 1, 3, 4, 5],
+            17: [0, 1, 3, 5],
+            18: [1, 2, 4],
+            19: [1, 2, 4, 5],
+            20: [1, 2, 5],
+            21: [1, 2, 3, 4],
+            22: [1, 2, 3, 4, 5],
+            23: [1, 2, 3, 5],
+            24: [1, 3, 4],
+            25: [1, 3, 4, 5],
+            26: [1, 3, 5]
+        };
 
+        if (blackFaces[cubieIndex]) {
+            blackFaces[cubieIndex].forEach(face => {
+                faceColors[face] = 'black';
+            });
         }
-        if (cubieIndex === 17) {
-            faceColors[0] = "black";
-            faceColors[1] = "black";
-            faceColors[3] = "black";
-            faceColors[5] = "black";
-        }
-        if (cubieIndex === 16) {
-            faceColors[0] = "black";
-            faceColors[1] = "black";
-            faceColors[3] = "black";
-            faceColors[4] = "black";
-            faceColors[5] = "black";
-        }
-        if (cubieIndex === 15) {
-            faceColors[0] = "black";
-            faceColors[1] = "black";
-            faceColors[3] = "black";
-            faceColors[4] = "black";
-        }
-        if (cubieIndex === 14) {
-            faceColors[0] = "black";
-            faceColors[1] = "black";
-            faceColors[2] = "black";
-            faceColors[3] = "black";
-            faceColors[5] = "black";
-        }
-        if (cubieIndex === 13) {
-            faceColors[0] = "black";
-            faceColors[1] = "black";
-            faceColors[2] = "black";
-            faceColors[4] = "black";
-            faceColors[3] = "black";
-            faceColors[5] = "black";
-        }
-        if (cubieIndex === 12) {
-            faceColors[0] = "black";
-            faceColors[1] = "black";
-            faceColors[2] = "black";
-            faceColors[4] = "black";
-            faceColors[3] = "black";
-        }
-        if (cubieIndex === 11) {
-            faceColors[0] = "black";
-            faceColors[1] = "black";
-            faceColors[2] = "black";
-            faceColors[5] = "black";
-        }
-        if (cubieIndex === 10) {
-            faceColors[0] = "black";
-            faceColors[1] = "black";
-            faceColors[2] = "black";
-            faceColors[4] = "black";
-            faceColors[5] = "black";
-        }
-        if (cubieIndex === 9) {
-            faceColors[0] = "black";
-            faceColors[1] = "black";
-            faceColors[2] = "black";
-            faceColors[4] = "black";
-        }
-        if (cubieIndex === 8) {
-            faceColors[0] = "black";
-            faceColors[3] = "black";
-            faceColors[5] = "black";
-        }
-        if (cubieIndex === 7) {
-            faceColors[0] = "black";
-            faceColors[3] = "black";
-            faceColors[4] = "black";
-            faceColors[5] = "black";
-        }
-        if (cubieIndex === 6) {
-            faceColors[0] = "black";
-            faceColors[3] = "black";
-            faceColors[4] = "black";
-        }
-        if (cubieIndex === 5) {
-            faceColors[0] = "black";
-            faceColors[2] = "black";
-            faceColors[3] = "black";
-            faceColors[5] = "black";
-        }
-        if (cubieIndex === 4) {
-            faceColors[0] = "black";
-            faceColors[2] = "black";
-            faceColors[3] = "black";
-            faceColors[4] = "black";
-            faceColors[5] = "black";
-        }
-        if (cubieIndex === 3) {
-            faceColors[0] = "black";
-            faceColors[2] = "black";
-            faceColors[3] = "black";
-            faceColors[4] = "black";
-        }
-        if (cubieIndex === 2) {
-            faceColors[0] = "black";
-            faceColors[2] = "black";
-            faceColors[5] = "black";
-        }
-        if (cubieIndex === 1) {
-            faceColors[0] = "black";
-            faceColors[2] = "black";
-            faceColors[4] = "black";
-            faceColors[5] = "black";
-        }
-        if (cubieIndex === 0) {
-            faceColors[0] = "black";
-            faceColors[2] = "black";
-            faceColors[4] = "black";
-        }
+
         return faceColors;
-    }    
-  
+    }
+    
    
 }
 
