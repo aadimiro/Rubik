@@ -1,10 +1,11 @@
 import logging
+import numpy as np
 
 class Cube:
     def __init__(self):
         logging.basicConfig(level=logging.DEBUG)  # Set logging level to DEBUG
         self.state = self.initialize_cube()
-        self.orientation = {'x': 0, 'y': 0, 'z': 0}  # Orientation in degrees
+        self.orientation_matrix = np.identity(3)  # 3x3 identity matrix
 
     def initialize_cube(self):
         # Initialize the cube with the standard color configuration
@@ -17,57 +18,87 @@ class Cube:
             'R': ['R'] * 9   # Red (Right face)
         }
 
-    def rotate_face(self, face, direction):
+    def rotation_matrix(self, axis, angle):
         """
-        Rotates the specified face of the cube.
+        Generate a rotation matrix for a given axis and angle.
         Args:
-            face: The key of the face to rotate in the `self.state` dictionary.
-            direction: 'clockwise' or 'counterclockwise'.
+            axis: 'x', 'y', or 'z'.
+            angle: Angle in degrees.
+        Returns:
+            A 3x3 numpy array representing the rotation matrix.
         """
-        rotation_pattern = {
-            'clockwise': [6, 3, 0, 7, 4, 1, 8, 5, 2],
-            'counterclockwise': [2, 5, 8, 1, 4, 7, 0, 3, 6]
-        }
-        rotated_indices = rotation_pattern[direction]
-        self.state[face] = [self.state[face][i] for i in rotated_indices]
+        angle_rad = np.deg2rad(angle)
+        if axis == 'x':
+            return np.array([
+                [1, 0, 0],
+                [0, np.cos(angle_rad), -np.sin(angle_rad)],
+                [0, np.sin(angle_rad), np.cos(angle_rad)]
+            ])
+        elif axis == 'y':
+            return np.array([
+                [np.cos(angle_rad), 0, np.sin(angle_rad)],
+                [0, 1, 0],
+                [-np.sin(angle_rad), 0, np.cos(angle_rad)]
+            ])
+        elif axis == 'z':
+            return np.array([
+                [np.cos(angle_rad), -np.sin(angle_rad), 0],
+                [np.sin(angle_rad), np.cos(angle_rad), 0],
+                [0, 0, 1]
+            ])
+        else:
+            raise ValueError("Invalid axis")
 
     def get_axis_and_direction(self, key):
         """
-        Maps a key press to an axis and direction.
+        Determine the axis and direction of rotation based on the key press.
         Args:
-            key: Key pressed (e.g., 'ArrowUp').
+            key: The key pressed (e.g., 'ArrowUp', 'ArrowDown', etc.).
         Returns:
-            Tuple (axis, direction) or None if the key is invalid.
+            A tuple (axis, direction) where axis is 'x', 'y', or 'z' and direction is 1 or -1.
         """
-        mapping = {
-            'ArrowUp': ('x', 'counterclockwise'),
-            'ArrowDown': ('x', 'clockwise'),
-            'ArrowLeft': ('y', 'counterclockwise'),
-            'ArrowRight': ('y', 'clockwise'),
-            'q': ('z', 'counterclockwise'),
-            'e': ('z', 'clockwise')
-        }
-        return mapping.get(key)
+        if key == 'ArrowUp':
+            return 'x', 'clockwise'
+        elif key == 'ArrowDown':
+            return 'x', 'counterclockwise'
+        elif key == 'ArrowLeft':
+            return 'y', 'clockwise'
+        elif key == 'ArrowRight':
+            return 'y', 'counterclockwise'
+        elif key == 'q':
+            return 'z', 'counterclockwise'
+        elif key == 'e':
+            return 'z', 'clockwise'
+        else:
+            raise ValueError("Invalid key")
 
     def rotate(self, axis, direction):
         """
-        Rotate the cube around the specified axis.
+        Rotate the cube around the specified axis considering the cube current orientation.
         Args:
             axis: 'x', 'y', or 'z'.
             direction: 'clockwise' or 'counterclockwise'.
         """
         angle = 90 if direction == 'clockwise' else -90
-        self.orientation[axis] = (self.orientation[axis] + angle) % 360
+        rotation_mat = self.rotation_matrix(axis, angle)
+
+        logging.debug(f"Orientation matrix before:\n{self.orientation_matrix}")
+        logging.debug(f"Rotation matrix for axis {axis} and angle {angle}:\n{rotation_mat}")
+
+        # Update the orientation matrix
+        self.orientation_matrix = np.dot(rotation_mat, self.orientation_matrix)
+
+        logging.debug(f"Orientation matrix after:\n{self.orientation_matrix}")
 
     def get_state(self):
         """
         Returns the current state of the cube.
         """
-        return {'state': self.state, 'orientation': self.orientation}
+        return {'state': self.state, 'orientation': self.orientation_matrix.tolist()}
 
     def set_state(self, state):
         """
         Updates the cube's state and orientation.
         """
         self.state = state['state']
-        self.orientation = state['orientation']
+        self.orientation_matrix = np.array(state['orientation'])

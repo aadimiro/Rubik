@@ -1,14 +1,16 @@
 class Cube {
     constructor() {
         this.state = null;
-        this.orientation = { x: 0, y: 0, z: 0 }; // Orientation in degrees
+        this.orientationMatrix = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]; // 3x3 identity matrix
     }
 
     async fetchState() {
         const response = await fetch('/cube/state');
         const data = await response.json();
         this.state = data.state;
-        this.orientation = data.orientation;
+        this.orientationMatrix = data.orientation;
+        console.log('Fetched state:', this.state);
+        console.log('Fetched orientation matrix:', this.orientationMatrix);
         this.render();
     }
 
@@ -31,20 +33,56 @@ class Cube {
             R: 0xff0000  // Red
         };
 
+        // Update the cube faces with the correct colors
         rubiksCube.children.forEach((cubie, index) => {
             const faceColors = this.getFaceColors(index);
             cubie.material.forEach((material, i) => {
+                console.log(`Setting face ${i} color: ${colorMap[faceColors[i]]}`);
                 material.color.setHex(colorMap[faceColors[i]]);
             });
         });
 
-        rubiksCube.rotation.x = THREE.Math.degToRad(this.orientation.x);
-        rubiksCube.rotation.y = THREE.Math.degToRad(this.orientation.y);
-        rubiksCube.rotation.z = THREE.Math.degToRad(this.orientation.z);
+        // Convert 3x3 orientation matrix to 4x4 matrix
+        const orientationMatrix4x4 = [
+            ...this.orientationMatrix[0], 0,
+            ...this.orientationMatrix[1], 0,
+            ...this.orientationMatrix[2], 0,
+            0, 0, 0, 1
+        ];
+
+        // Apply the orientation matrix to the cube
+        const matrix = new THREE.Matrix4().fromArray(orientationMatrix4x4);
+        console.log('Applying orientation matrix:', matrix);
+
+        // Validate the matrix before applying
+        if (this.isValidMatrix(matrix)) {
+            rubiksCube.setRotationFromMatrix(matrix);
+        } else {
+            console.error('Invalid orientation matrix:', matrix);
+            this.logMatrix(matrix);
+        }
+    }
+
+    isValidMatrix(matrix) {
+        // Check if the matrix contains valid numbers
+        for (let i = 0; i < 16; i++) {
+            if (!isFinite(matrix.elements[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    logMatrix(matrix) {
+        // Log the matrix values for debugging
+        console.log('Matrix values:');
+        for (let i = 0; i < 16; i++) {
+            console.log(`matrix.elements[${i}]: ${matrix.elements[i]}`);
+        }
     }
 
     getFaceColors(cubieIndex) {
-        // Return the colors for the faces of a given cubie (logic depends on your cube mapping)
+        // Return the colors for the faces of a given cubie (this depends on your cube mapping)
         return ['W', 'Y', 'B', 'G', 'O', 'R']; // Example order
     }
 }
@@ -58,6 +96,14 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, threeCanvas.clientWidth / threeCanvas.clientHeight, 0.1, 1000);
 camera.position.set(3, 3, 3);
 camera.lookAt(0, 0, 0);
+
+// Add lighting to the scene
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+directionalLight.position.set(5, 5, 5).normalize();
+scene.add(directionalLight);
 
 const cubieSize = 0.9;
 const rubiksCube = new THREE.Group();
