@@ -12,11 +12,12 @@ class Cube:
         return {
             'U': ['W'] * 9,  # White (Upper face)
             'D': ['Y'] * 9,  # Yellow (Down face)
-            'F': ['B'] * 9,  # Blue (Front face)
+            'F': ['R'] * 9,  # Blue (Front face)
             'B': ['G'] * 9,  # Green (Back face)
             'L': ['O'] * 9,  # Orange (Left face)
-            'R': ['R'] * 9   # Red (Right face)
+            'R': ['B'] * 9   # Red (Right face)
         }
+    
 
     def rotation_matrix(self, axis, angle):
         """
@@ -72,6 +73,21 @@ class Cube:
         else:
             raise ValueError("Invalid key")
 
+    def get_face_and_direction(self, key, shift_pressed):
+        """
+        Determine the face and direction of rotation based on the key press.
+        Args:
+            key: The key pressed (e.g., 'u', 'r', 'l', 'f', 'b', 'd').
+            shift_pressed: Boolean indicating if the shift key is pressed.
+        Returns:
+            A tuple (face, direction) where face is 'U', 'D', 'F', 'B', 'L', 'R' and direction is 'clockwise' or 'counterclockwise'.
+        """
+        if key in ['u', 'r', 'l', 'f', 'b', 'd']:
+            direction = 'counterclockwise' if shift_pressed else 'clockwise'
+            return key.upper(), direction
+        else:
+            raise ValueError("Invalid key for face rotation")
+
     def rotate(self, axis, direction):
         """
         Rotate the cube around the specified axis considering the cube current orientation.
@@ -90,6 +106,76 @@ class Cube:
         self.orientation_matrix = np.dot(self.orientation_matrix,rotation_mat)
 
         logging.debug(f"Orientation matrix after:\n{self.orientation_matrix}")
+
+    def rotate_face(self, face, direction):
+        """
+        Rotate a face of the cube and update adjacent edges.
+        Args:
+            face: 'U', 'D', 'F', 'B', 'L', or 'R'.
+            direction: 'clockwise' or 'counterclockwise'.
+        """
+        # Helper function to rotate a 3x3 grid
+        def rotate_grid(grid, clockwise):
+            if clockwise:
+                return [
+                    grid[6], grid[3], grid[0],
+                    grid[7], grid[4], grid[1],
+                    grid[8], grid[5], grid[2]
+                ]
+            else:
+                return [
+                    grid[2], grid[5], grid[8],
+                    grid[1], grid[4], grid[7],
+                    grid[0], grid[3], grid[6]
+                ]
+        
+        # Rotate the face itself
+        self.state[face] = rotate_grid(self.state[face], direction == 'clockwise')
+
+        # Adjacent edges affected by the face rotation
+        adjacent = {
+            'U': [('F', 0), ('R', 0), ('B', 0), ('L', 0)],
+            'D': [('F', 2), ('L', 2), ('B', 2), ('R', 2)],
+            'F': [('U', 2), ('R', 1), ('D', 0), ('L', 1)],
+            'B': [('U', 0), ('L', 3), ('D', 2), ('R', 3)],
+            'L': [('U', 3), ('F', 3), ('D', 3), ('B', 1)],
+            'R': [('U', 1), ('B', 3), ('D', 1), ('F', 1)],
+        }
+
+        # Extract the relevant rows/columns from adjacent faces
+        def get_row(face, row):
+            if row == 0:  # Top row
+                return self.state[face][:3]
+            elif row == 1:  # Right column
+                return [self.state[face][2], self.state[face][5], self.state[face][8]]
+            elif row == 2:  # Bottom row
+                return self.state[face][6:]
+            elif row == 3:  # Left column
+                return [self.state[face][0], self.state[face][3], self.state[face][6]]
+
+        def set_row(face, row, new_values):
+            if row == 0:
+                self.state[face][:3] = new_values
+            elif row == 1:
+                self.state[face][2], self.state[face][5], self.state[face][8] = new_values
+            elif row == 2:
+                self.state[face][6:] = new_values
+            elif row == 3:
+                self.state[face][0], self.state[face][3], self.state[face][6] = new_values
+
+        # Get the affected rows
+        rows = [get_row(f, r) for f, r in adjacent[face]]
+
+        # Rotate adjacent edges
+        if direction == 'clockwise':
+            rows = [rows[-1]] + rows[:-1]
+        else:
+            rows = rows[1:] + [rows[0]]
+
+        # Set the affected rows back
+        for (f, r), new_row in zip(adjacent[face], rows):
+            set_row(f, r, new_row)
+
 
     def get_state(self):
         """

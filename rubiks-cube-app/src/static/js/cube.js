@@ -38,7 +38,7 @@ class Cube {
         rubiksCube.children.forEach((cubie, index) => {
             const faceColors = this.getFaceColors(index);
             cubie.material.forEach((material, i) => {
-                console.log(`Setting face ${i} color: ${colorMap[faceColors[i]]}`);
+                //console.log(`Setting face ${i} color: ${colorMap[faceColors[i]]}`);
                 material.color.setHex(colorMap[faceColors[i]]);
             });
         });
@@ -83,7 +83,30 @@ class Cube {
     }
 
     getFaceColors(cubieIndex) {
-        const faceColors = ['W', 'Y', 'B', 'G', 'O', 'R'];
+        //const faceColors = ['W', 'Y', 'B', 'G', 'O', 'R'];
+
+        const faceColors = ['black', 'black', 'black', 'black', 'black', 'black'];
+
+        // Map cubieIndex to its position on the cube
+        const positions = [];
+        for (let x = -1; x <= 1; x++) {
+            for (let y = -1; y <= 1; y++) {
+            for (let z = -1; z <= 1; z++) {
+                positions.push({ x, y, z });
+            }
+            }
+        }
+    
+        const position = positions[cubieIndex];
+    
+        // Determine the colors based on the position and state
+        if (position.y === 1) faceColors[2] = this.state.U[cubieIndex % 9]; // Up face
+        if (position.y === -1) faceColors[3] = this.state.D[cubieIndex % 9]; // Down face
+        if (position.z === 1) faceColors[4] = this.state.F[cubieIndex % 9]; // Front face
+        if (position.z === -1) faceColors[5] = this.state.B[cubieIndex % 9]; // Back face
+        if (position.x === -1) faceColors[1] = this.state.L[cubieIndex % 9]; // Left face
+        if (position.x === 1) faceColors[0] = this.state.R[cubieIndex % 9]; // Right face
+
         const blackFaces = {
             0: [0, 2, 4],
             1: [0, 2, 4, 5],
@@ -170,5 +193,6 @@ const cube = new Cube();
 cube.fetchState();
 
 document.addEventListener('keydown', (event) => {
-    cube.sendKeyPress(event.key);
+    cube.sendKeyPress(event.key, event.shiftKey);
+    cube.fetchState();
 });

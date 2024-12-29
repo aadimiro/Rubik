@@ -25,12 +25,20 @@ def handle_key_press():
     try:
         data = request.get_json()
         key = data.get('key')
-        print(f"Received key: {key}")  # Debugging
+        shift_pressed = data.get('shift', False)
+        print(f"Received key: {key}, shift: {shift_pressed}")  # Debugging
 
-        axis, direction = cube.get_axis_and_direction(key)
-        print(f"Mapped to axis: {axis}, direction: {direction}")  # Debugging
+        if key in ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'q', 'e']:
+            axis, direction = cube.get_axis_and_direction(key)
+            print(f"Mapped to axis: {axis}, direction: {direction}")  # Debugging
+            cube.rotate(axis, direction)
+        elif key in ['u', 'r', 'l', 'f', 'b', 'd']:
+            face, direction = cube.get_face_and_direction(key, shift_pressed)
+            print(f"Mapped to face: {face}, direction: {direction}")  # Debugging
+            cube.rotate_face(face, direction)
+        else:
+            raise ValueError("Invalid key")
 
-        cube.rotate(axis, direction)
         return jsonify(success=True, state=cube.get_state())
     except ValueError as ve:
         print(f"ValueError: {ve}")
