@@ -50,5 +50,14 @@ def handle_key_press():
         print(f"Error processing key press: {e}")
         return jsonify({"error": str(e)}), 500
 
+@app.route('/cube/shuffle', methods=['POST'])
+def shuffle_cube():
+    try:
+        shuffle_sequence = cube.shuffle()
+        return jsonify(success=True, sequence=shuffle_sequence, state=cube.get_state())
+    except Exception as e:
+        print(f"Error shuffling cube: {e}")
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True)

@@ -231,6 +231,19 @@ class Cube:
         for (f, r), new_row in zip(adjacent[face], rows):
             set_row(f, r, new_row)
 
+    def shuffle(self, num_moves=20):
+        """
+        Shuffle the cube by performing a sequence of random moves.
+        Args:
+            num_moves: Number of random moves to perform.
+        """
+        import random
+        # For num_moves, generate a random face and direction and rotate the face
+        for _ in range(num_moves):
+            face = random.choice(['U', 'D', 'F', 'B', 'L', 'R'])
+            direction = random.choice(['clockwise', 'counterclockwise'])
+            self.rotate_face(face, direction)
+            
 
     def get_state(self):
         """

@@ -192,3 +192,24 @@ document.addEventListener('keyup', function(event) {
         shiftPressed = false;
     }
 });
+
+document.getElementById('mixButton').addEventListener('click', function() {
+    fetch('/cube/shuffle', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Shuffle sequence:', data.sequence);
+            cube.fetchState(); // Fetch the updated state and re-render the cube
+        } else {
+            console.error('Error:', data.error);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
