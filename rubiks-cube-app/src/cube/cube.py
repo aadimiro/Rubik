@@ -9,14 +9,37 @@ class Cube:
 
     def initialize_cube(self):
         # Initialize the cube with the standard color configuration
-        return {
+        cube_state = {
             'U': ['W'] * 9,  # White (Upper face)
             'D': ['Y'] * 9,  # Yellow (Down face)
-            'F': ['R'] * 9,  # Blue (Front face)
-            'B': ['O'] * 9,  # Green (Back face)
-            'L': ['G'] * 9,  # Orange (Left face)
-            'R': ['B'] * 9   # Red (Right face)
+            'F': ['R'] * 9,  # Red (Front face)
+            'B': ['O'] * 9,  # Orange (Back face)
+            'L': ['G'] * 9,  # Green (Left face)
+            'R': ['B'] * 9   # Blue (Right face)
         }
+
+        self.state = cube_state
+
+        # Perform a right face rotation clockwise
+        #self.rotate_face('U', 'clockwise')
+        #self.rotate_face('R', 'clockwise')
+
+         #set all faces to R G B O W Y B R O
+        #for face in ['U', 'D', 'F', 'B', 'L', 'R']:
+        #    self.state[face] = ['R', 'G', 'B', 'O', 'W', 'Y', 'B', 'R', 'O']
+
+        
+
+        # Print all faces as text
+        print("Initial state:")
+        for face in ['U', 'D', 'F', 'B', 'L', 'R']:
+            print(f"{face} face:")
+            for i in range(0, 9, 3):
+                print(cube_state[face][i:i+3])
+
+
+
+        return self.state
     
 
     def rotation_matrix(self, axis, angle):
@@ -128,18 +151,21 @@ class Cube:
                     grid[1], grid[4], grid[7],
                     grid[0], grid[3], grid[6]
                 ]
-        
+
         # Rotate the face itself
-        self.state[face] = rotate_grid(self.state[face], direction == 'clockwise')
+        if face in ['L', 'R']:
+            self.state[face] = rotate_grid(self.state[face], direction != 'clockwise')
+        else:
+            self.state[face] = rotate_grid(self.state[face], direction == 'clockwise')
 
         # Adjacent edges affected by the face rotation
         adjacent = {
-            'U': [('F', 0), ('R', 0), ('B', 0), ('L', 0)],
-            'D': [('F', 2), ('L', 2), ('B', 2), ('R', 2)],
-            'F': [('U', 2), ('R', 1), ('D', 0), ('L', 1)],
-            'B': [('U', 0), ('L', 3), ('D', 2), ('R', 3)],
-            'L': [('U', 3), ('F', 3), ('D', 3), ('B', 1)],
-            'R': [('U', 1), ('B', 3), ('D', 1), ('F', 1)],
+            'U': [('F', 2), ('R', 2), ('B', 2), ('L', 2)],
+            'D': [('F', 0), ('L', 0), ('B', 0), ('R', 0)],
+            'F': [('U', 2), ('R', 3), ('D', 0), ('L', 1)],
+            'B': [('U', 0), ('L', 3), ('D', 2), ('R', 1)],
+            'L': [('U', 3), ('F', 1), ('D', 3), ('B', 1)],
+            'R': [('U', 1), ('B', 3), ('D', 1), ('F', 3)],
         }
 
         # Extract the relevant rows/columns from adjacent faces
@@ -167,10 +193,21 @@ class Cube:
         rows = [get_row(f, r) for f, r in adjacent[face]]
 
         # Rotate adjacent edges
-        if direction == 'clockwise':
-            rows = [rows[-1]] + rows[:-1]
-        else:
-            rows = rows[1:] + [rows[0]]
+        if face in ['U', 'D']:
+            if direction == 'counterclockwise':
+                rows = [rows[3], rows[0][::-1], rows[1][::-1], rows[2]]
+            else:
+                rows = [rows[1][::-1], rows[2], rows[3], rows[0][::-1]]
+        elif face in ['L', 'R']:
+            if direction == 'counterclockwise':
+                rows = [rows[1], rows[2], rows[3], rows[0]]
+            else:
+                rows = [rows[3][::-1], rows[0], rows[1], rows[2][::-1]]
+        elif face in ['F', 'B']:
+            if direction == 'counterclockwise':
+                rows = [rows[1], rows[2][::-1], rows[3], rows[0][::-1]]
+            else:
+                rows = [rows[3], rows[0][::-1], rows[1], rows[2][::-1]]
 
         # Set the affected rows back
         for (f, r), new_row in zip(adjacent[face], rows):

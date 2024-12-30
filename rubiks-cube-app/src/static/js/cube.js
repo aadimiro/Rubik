@@ -91,57 +91,21 @@ class Cube {
         const positions = [];
         for (let x = -1; x <= 1; x++) {
             for (let y = -1; y <= 1; y++) {
-            for (let z = -1; z <= 1; z++) {
-                positions.push({ x, y, z });
-            }
+                for (let z = -1; z <= 1; z++) {
+                    positions.push({ x, y, z });
+                }
             }
         }
-    
+
         const position = positions[cubieIndex];
-    
+
         // Determine the colors based on the position and state
-        if (position.y === 1) faceColors[2] = this.state.U[cubieIndex % 9]; // Up face
-        if (position.y === -1) faceColors[3] = this.state.D[cubieIndex % 9]; // Down face
-        if (position.z === 1) faceColors[4] = this.state.F[cubieIndex % 9]; // Front face
-        if (position.z === -1) faceColors[5] = this.state.B[cubieIndex % 9]; // Back face
-        if (position.x === -1) faceColors[1] = this.state.L[cubieIndex % 9]; // Left face
-        if (position.x === 1) faceColors[0] = this.state.R[cubieIndex % 9]; // Right face
-
-        const blackFaces = {
-            0: [0, 2, 4],
-            1: [0, 2, 4, 5],
-            2: [0, 2, 5],
-            3: [0, 2, 3, 4],
-            4: [0, 2, 3, 4, 5],
-            5: [0, 2, 3, 5],
-            6: [0, 3, 4],
-            7: [0, 3, 4, 5],
-            8: [0, 3, 5],
-            9: [0, 1, 2, 4],
-            10: [0, 1, 2, 4, 5],
-            11: [0, 1, 2, 5],
-            12: [0, 1, 2, 3, 4],
-            13: [0, 1, 2, 3, 4, 5],
-            14: [0, 1, 2, 3, 5],
-            15: [0, 1, 3, 4],
-            16: [0, 1, 3, 4, 5],
-            17: [0, 1, 3, 5],
-            18: [1, 2, 4],
-            19: [1, 2, 4, 5],
-            20: [1, 2, 5],
-            21: [1, 2, 3, 4],
-            22: [1, 2, 3, 4, 5],
-            23: [1, 2, 3, 5],
-            24: [1, 3, 4],
-            25: [1, 3, 4, 5],
-            26: [1, 3, 5]
-        };
-
-        if (blackFaces[cubieIndex]) {
-            blackFaces[cubieIndex].forEach(face => {
-                faceColors[face] = 'black';
-            });
-        }
+        if (position.z === -1) faceColors[5] = this.state.B[(position.y + 1) * 3 + (-position.x + 1)]; // Back face
+        if (position.z === 1) faceColors[4] = this.state.F[(position.y + 1) * 3 + (-position.x + 1)]; // Front face
+        if (position.y === -1) faceColors[3] = this.state.D[(-position.z + 1) * 3 + (position.x + 1)]; // Down face
+        if (position.y === 1) faceColors[2] = this.state.U[(position.z + 1) * 3 + (position.x + 1)]; // Up face
+        if (position.x === -1) faceColors[1] = this.state.L[(position.y + 1) * 3 + (position.z + 1)]; // Left face
+        if (position.x === 1) faceColors[0] = this.state.R[(position.y + 1) * 3 + (-position.z + 1)]; // Right face
 
         return faceColors;
     }
