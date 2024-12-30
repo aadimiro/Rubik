@@ -98,18 +98,26 @@ class Cube:
 
     def get_face_and_direction(self, key, shift_pressed):
         """
-        Determine the face and direction of rotation based on the key press.
+        Map key press to face and direction.
         Args:
-            key: The key pressed (e.g., 'u', 'r', 'l', 'f', 'b', 'd').
-            shift_pressed: Boolean indicating if the shift key is pressed.
+            key: The key pressed.
+            shift_pressed: Whether the Shift key is pressed.
         Returns:
-            A tuple (face, direction) where face is 'U', 'D', 'F', 'B', 'L', 'R' and direction is 'clockwise' or 'counterclockwise'.
+            A tuple of (face, direction).
         """
-        if key in ['u', 'r', 'l', 'f', 'b', 'd']:
-            direction = 'counterclockwise' if shift_pressed else 'clockwise'
-            return key.upper(), direction
-        else:
-            raise ValueError("Invalid key for face rotation")
+        face_map = {
+            'u': 'U',
+            'r': 'R',
+            'l': 'L',
+            'f': 'F',
+            'b': 'B',
+            'd': 'D'
+        }
+        direction = 'counterclockwise' if shift_pressed else 'clockwise'
+        face = face_map.get(key.lower())  # Normalize key to lowercase
+        if face is None:
+            raise ValueError("Invalid key")
+        return face, direction
 
     def rotate(self, axis, direction):
         """
@@ -153,7 +161,7 @@ class Cube:
                 ]
 
         # Rotate the face itself
-        if face in ['L', 'R']:
+        if face in ['L', 'R', 'B']:
             self.state[face] = rotate_grid(self.state[face], direction != 'clockwise')
         else:
             self.state[face] = rotate_grid(self.state[face], direction == 'clockwise')
@@ -195,19 +203,29 @@ class Cube:
         # Rotate adjacent edges
         if face in ['U', 'D']:
             if direction == 'counterclockwise':
-                rows = [rows[3], rows[0][::-1], rows[1][::-1], rows[2]]
+                rows = [rows[3][::-1], rows[0][::-1], rows[1], rows[2]]
             else:
                 rows = [rows[1][::-1], rows[2], rows[3], rows[0][::-1]]
-        elif face in ['L', 'R']:
+        elif face in ['R']:
             if direction == 'counterclockwise':
-                rows = [rows[1], rows[2], rows[3], rows[0]]
+                rows = [rows[1], rows[2], rows[3][::-1], rows[0][::-1]]
             else:
                 rows = [rows[3][::-1], rows[0], rows[1], rows[2][::-1]]
-        elif face in ['F', 'B']:
+        elif face in ['L']:
+            if direction == 'counterclockwise':
+                rows = [rows[1][::-1], rows[2][::-1], rows[3], rows[0]]
+            else:
+                rows = [rows[3], rows[0][::-1], rows[1][::-1], rows[2]]
+        elif face in ['F']:
+            if direction == 'counterclockwise':
+                rows = [rows[1][::-1], rows[2], rows[3][::-1], rows[0]]
+            else:
+                rows = [rows[3], rows[0][::-1], rows[1], rows[2][::-1]]
+        elif face in ['B']:
             if direction == 'counterclockwise':
                 rows = [rows[1], rows[2][::-1], rows[3], rows[0][::-1]]
             else:
-                rows = [rows[3], rows[0][::-1], rows[1], rows[2][::-1]]
+                rows = [rows[3][::-1], rows[0], rows[1][::-1], rows[2]]
 
         # Set the affected rows back
         for (f, r), new_row in zip(adjacent[face], rows):

@@ -28,11 +28,14 @@ def handle_key_press():
         shift_pressed = data.get('shift', False)
         print(f"Received key: {key}, shift: {shift_pressed}")  # Debugging
 
+        if key == 'Shift':
+            return jsonify(success=True, state=cube.get_state())
+
         if key in ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'q', 'e']:
             axis, direction = cube.get_axis_and_direction(key)
             print(f"Mapped to axis: {axis}, direction: {direction}")  # Debugging
             cube.rotate(axis, direction)
-        elif key in ['u', 'r', 'l', 'f', 'b', 'd']:
+        elif key.lower() in ['u', 'r', 'l', 'f', 'b', 'd']:  # Normalize key to lowercase
             face, direction = cube.get_face_and_direction(key, shift_pressed)
             print(f"Mapped to face: {face}, direction: {direction}")  # Debugging
             cube.rotate_face(face, direction)

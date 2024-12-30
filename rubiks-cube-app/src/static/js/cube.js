@@ -156,7 +156,39 @@ animate();
 const cube = new Cube();
 cube.fetchState();
 
-document.addEventListener('keydown', (event) => {
-    cube.sendKeyPress(event.key, event.shiftKey);
-    cube.fetchState();
+let shiftPressed = false;
+
+document.addEventListener('keydown', function(event) {
+    const key = event.key;
+
+    if (key === 'Shift') {
+        shiftPressed = true;
+        return;
+    }
+
+    fetch('/cube/key-press', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ key: key, shift: shiftPressed }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Cube state:', data.state);
+            cube.fetchState(); // Fetch the updated state and re-render the cube
+        } else {
+            console.error('Error:', data.error);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+
+document.addEventListener('keyup', function(event) {
+    if (event.key === 'Shift') {
+        shiftPressed = false;
+    }
 });
