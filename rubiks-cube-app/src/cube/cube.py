@@ -231,6 +231,52 @@ class Cube:
         for (f, r), new_row in zip(adjacent[face], rows):
             set_row(f, r, new_row)
 
+    def rotate_face_oriented(self, face, direction):
+        # The input values face and direction are from the user's perspective.
+        # Before calling rotate_face, determine the effective face and direction with which rotate_face shall
+        # be called, based on the current orientation.
+        # The orientation matrix is a 3x3 matrix that represents the orientation of the cube.
+        # Determine the effective face and direction based on the current orientation
+        face_to_axis = {
+            'U': np.array([0, 1, 0]),
+            'D': np.array([0, -1, 0]),
+            'F': np.array([0, 0, 1]),
+            'B': np.array([0, 0, -1]),
+            'L': np.array([-1, 0, 0]),
+            'R': np.array([1, 0, 0])
+        }
+
+        # Transform the face vector by the orientation matrix
+        face_vector = face_to_axis[face]
+        transformed_vector = np.dot(self.orientation_matrix, face_vector)
+
+        # Determine the effective face after transformation
+        effective_face = None
+        max_dot = -1
+        for f, vec in face_to_axis.items():
+            dot_product = np.dot(transformed_vector, vec)
+            if dot_product > max_dot:
+                max_dot = dot_product
+                effective_face = f
+
+        # Determine the effective direction
+        if face in ['U', 'D']:
+            if effective_face in ['F', 'B']:
+                effective_direction = 'clockwise' if direction == 'counterclockwise' else 'counterclockwise'
+            else:
+                effective_direction = 'counterclockwise' if direction == 'counterclockwise' else 'clockwise'
+        elif face in ['F', 'B']:
+            if effective_face in ['U', 'D']:
+                effective_direction = 'clockwise' if direction == 'counterclockwise' else 'counterclockwise'
+            else:
+                effective_direction = 'counterclockwise' if direction == 'counterclockwise' else 'clockwise'
+        else:
+            effective_direction = direction
+
+        # Rotate the effective face
+        self.rotate_face(effective_face, effective_direction)
+
+
     def shuffle(self, num_moves=20):
         """
         Shuffle the cube by performing a sequence of random moves.

@@ -38,7 +38,7 @@ def handle_key_press():
         elif key.lower() in ['u', 'r', 'l', 'f', 'b', 'd']:  # Normalize key to lowercase
             face, direction = cube.get_face_and_direction(key, shift_pressed)
             print(f"Mapped to face: {face}, direction: {direction}")  # Debugging
-            cube.rotate_face(face, direction)
+            cube.rotate_face_oriented(face, direction)
         else:
             raise ValueError("Invalid key")
 
