@@ -223,3 +223,68 @@ document.getElementById('mixButton').addEventListener('click', function() {
         console.error('Error:', error);
     });
 });
+
+document.getElementById('executeButton').addEventListener('click', function() {
+    const sequence = document.getElementById('sequenceInput').value;
+    fetch('/cube/execute-sequence', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ sequence: sequence }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Executed sequence:', sequence);
+            cube.fetchState(); // Fetch the updated state and re-render the cube
+        } else {
+            console.error('Error:', data.error);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+
+document.getElementById('LineToFish').addEventListener('click', function() {
+    fetch('/cube/linetofish', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Line to Fish executed');
+            cube.fetchState(); // Fetch the updated state and re-render the cube
+        } else {
+            console.error('Error:', data.error);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+
+document.getElementById('CornerToFish').addEventListener('click', function() {
+    fetch('/cube/cornertofish', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Corner to Fish executed');
+            cube.fetchState(); // Fetch the updated state and re-render the cube
+        } else {
+            console.error('Error:', data.error);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
