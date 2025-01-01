@@ -156,13 +156,13 @@ animate();
 const cube = new Cube();
 cube.fetchState();
 
-let shiftPressed = false;
+let counterclockwisePressed = false;
 
 document.addEventListener('keydown', function(event) {
     const key = event.key;
 
-    if (key === 'Shift') {
-        shiftPressed = true;
+    if (key === "'" || key === "#") {
+        counterclockwisePressed = true;
         return;
     }
 
@@ -171,7 +171,7 @@ document.addEventListener('keydown', function(event) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ key: key, shift: shiftPressed }),
+        body: JSON.stringify({ key: key, counterclockwise: counterclockwisePressed }),
     })
     .then(response => response.json())
     .then(data => {
@@ -188,8 +188,8 @@ document.addEventListener('keydown', function(event) {
 });
 
 document.addEventListener('keyup', function(event) {
-    if (event.key === 'Shift') {
-        shiftPressed = false;
+    if (event.key === "'" || event.key === "#") {
+        counterclockwisePressed = false;
     }
 });
 

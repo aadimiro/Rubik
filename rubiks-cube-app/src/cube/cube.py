@@ -79,29 +79,32 @@ class Cube:
         Args:
             key: The key pressed (e.g., 'ArrowUp', 'ArrowDown', etc.).
         Returns:
-            A tuple (axis, direction) where axis is 'x', 'y', or 'z' and direction is 1 or -1.
+            A tuple (axis, direction) where axis is 'x', 'y', or 'z' and direction is 'clockwise' or 'counterclockwise'.
         """
-        if key == 'ArrowUp':
-            return 'x', 'clockwise'
-        elif key == 'ArrowDown':
-            return 'x', 'counterclockwise'
-        elif key == 'ArrowLeft':
-            return 'y', 'clockwise'
-        elif key == 'ArrowRight':
-            return 'y', 'counterclockwise'
-        elif key == 'q':
-            return 'z', 'counterclockwise'
-        elif key == 'e':
-            return 'z', 'clockwise'
+        key_map = {
+            'ArrowUp': ('x', 'counterclockwise'),
+            '8': ('x', 'counterclockwise'),
+            'ArrowDown': ('x', 'clockwise'),
+            '2': ('x', 'clockwise'),
+            'ArrowLeft': ('y', 'counterclockwise'),
+            '4': ('y', 'counterclockwise'),
+            'ArrowRight': ('y', 'clockwise'),
+            '6': ('y', 'clockwise'),
+            '3': ('z', 'counterclockwise'),
+            '7': ('z', 'clockwise')
+        }
+
+        if key in key_map:
+            return key_map[key]
         else:
             raise ValueError("Invalid key")
 
-    def get_face_and_direction(self, key, shift_pressed):
+    def get_face_and_direction(self, key, counterclockwise_pressed):
         """
         Map key press to face and direction.
         Args:
             key: The key pressed.
-            shift_pressed: Whether the Shift key is pressed.
+            counterclockwise_pressed: Whether the counterclockwise key is pressed.
         Returns:
             A tuple of (face, direction).
         """
@@ -113,8 +116,8 @@ class Cube:
             'b': 'B',
             'd': 'D'
         }
-        direction = 'counterclockwise' if shift_pressed else 'clockwise'
-        face = face_map.get(key.lower())  # Normalize key to lowercase
+        direction = 'counterclockwise' if counterclockwise_pressed else 'clockwise'
+        face = face_map.get(key.lower())
         if face is None:
             raise ValueError("Invalid key")
         return face, direction

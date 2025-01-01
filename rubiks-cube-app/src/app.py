@@ -25,18 +25,15 @@ def handle_key_press():
     try:
         data = request.get_json()
         key = data.get('key')
-        shift_pressed = data.get('shift', False)
-        print(f"Received key: {key}, shift: {shift_pressed}")  # Debugging
+        counterclockwise_pressed = data.get('counterclockwise', False)
+        print(f"Received key: {key}, counterclockwise: {counterclockwise_pressed}")  # Debugging
 
-        if key == 'Shift':
-            return jsonify(success=True, state=cube.get_state())
-
-        if key in ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'q', 'e']:
+        if key in ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', '8', '2', '4', '6', '3', '7']:
             axis, direction = cube.get_axis_and_direction(key)
             print(f"Mapped to axis: {axis}, direction: {direction}")  # Debugging
             cube.rotate(axis, direction)
         elif key.lower() in ['u', 'r', 'l', 'f', 'b', 'd']:  # Normalize key to lowercase
-            face, direction = cube.get_face_and_direction(key, shift_pressed)
+            face, direction = cube.get_face_and_direction(key, counterclockwise_pressed)
             print(f"Mapped to face: {face}, direction: {direction}")  # Debugging
             cube.rotate_face_oriented(face, direction)
         else:
