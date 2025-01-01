@@ -162,12 +162,17 @@ let widePressed = false;
 document.addEventListener('keydown', function(event) {
     const key = event.key;
 
+    // Prevent key events from triggering when typing in the sequence input field
+    if (document.activeElement.id === 'sequenceInput') {
+        return;
+    }
+
     if (key === "'" || key === "#") {
         counterclockwisePressed = true;
         return;
     }
 
-    if (key === "w" || key === "W") {
+    if (key === 'w') {
         widePressed = true;
         return;
     }
@@ -198,7 +203,7 @@ document.addEventListener('keyup', function(event) {
         counterclockwisePressed = false;
     }
 
-    if (event.key === 'w' || event.key === 'W') {
+    if (event.key === 'w') {
         widePressed = false;
     }
 });
