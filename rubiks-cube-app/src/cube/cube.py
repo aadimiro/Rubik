@@ -4,39 +4,39 @@ import numpy as np
 class Cube:
     def __init__(self):
         logging.basicConfig(level=logging.DEBUG)  # Set logging level to DEBUG
-        self.state = self.initialize_cube()
         self.orientation_matrix = np.identity(3)  # 3x3 identity matrix
+        self.state = self.initialize_cube()
 
     def initialize_cube(self):
         # Initialize the cube with the standard color configuration
         cube_state = {
             'U': ['W'] * 9,  # White (Upper face)
             'D': ['Y'] * 9,  # Yellow (Down face)
-            'F': ['R'] * 9,  # Red (Front face)
-            'B': ['O'] * 9,  # Orange (Back face)
-            'L': ['G'] * 9,  # Green (Left face)
-            'R': ['B'] * 9   # Blue (Right face)
+            'F': ['G'] * 9,  # Red (Front face)
+            'B': ['B'] * 9,  # Orange (Back face)
+            'L': ['O'] * 9,  # Green (Left face)
+            'R': ['R'] * 9   # Blue (Right face)
         }
 
         self.state = cube_state
 
         # Perform a right face rotation clockwise
         #self.rotate_face('U', 'clockwise')
+        #self.rotate_face_oriented('U', 'clockwise')
         #self.rotate_face('R', 'clockwise')
 
          #set all faces to R G B O W Y B R O
         #for face in ['U', 'D', 'F', 'B', 'L', 'R']:
-        #    self.state[face] = ['R', 'G', 'B', 'O', 'W', 'Y', 'B', 'R', 'O']
-
-        
+        #    self.state[face] = ['R', 'G', 'B', 'O', 'W', 'Y', 'B', 'R', 'O']      
 
         # Print all faces as text
-        print("Initial state:")
-        for face in ['U', 'D', 'F', 'B', 'L', 'R']:
-            print(f"{face} face:")
-            for i in range(0, 9, 3):
-                print(cube_state[face][i:i+3])
+        #print("Initial state:")
+        #for face in ['U', 'D', 'F', 'B', 'L', 'R']:
+        #    print(f"{face} face:")
+        #    for i in range(0, 9, 3):
+        #        print(cube_state[face][i:i+3])
 
+        #self.move_sequence("Rw' Uw2 x")
 
 
         return self.state
@@ -352,6 +352,48 @@ class Cube:
         slice, dir = wide_map[wide][1]
         self.rotate_slice_oriented(slice, dir)
         
+    def move_sequence(self, sequence):
+        # This function performs a sequence of moves.
+        # The sequence is a string of moves separated by spaces.
+        # Following are the possible moves: U, U', U2, D, D', D2, F, F', F2, B, B', B2, L, L', L2, R, R', R2,
+        # M, M', M2, E, E', E2, S, S', S2, x, x', x2, y, y', y2, z, z', z2.
+        # Rw, Rw', Rw2, Lw, Lw', Lw2, Fw, Fw', Fw2, Bw, Bw', Bw2, Uw, Uw', Uw2, Dw, Dw', Dw2.
+        # The moves are performed by calling the appropriate functions.
+
+        # Split the sequence by spaces
+        moves = sequence.split()
+        for move in moves:
+            # Extract direction and double move flags from the move
+            # direction = 'clockwise' if "'" not in move else 'counterclockwise' 
+            # double = True if '2' in move else False
+            direction = 'clockwise'
+            double = False
+            if "'" in move:
+                direction = 'counterclockwise'
+            if '2' in move:
+                double = True
+            # Extract the move type
+            move = move.replace("'", "").replace("2", "")
+            if move in ['U', 'D', 'F', 'B', 'L', 'R']:
+                self.rotate_face_oriented(move, direction)
+                if double:
+                    self.rotate_face_oriented(move, direction)
+            elif move in ['M', 'E', 'S']:
+                self.rotate_slice_oriented(move, direction)
+                if double:
+                    self.rotate_slice_oriented(move, direction)
+            elif move in ['x', 'y', 'z']:
+                self.rotate(move, direction)
+                if double:
+                    self.rotate(move, direction)
+            elif move in ['Rw', 'Lw', 'Fw', 'Bw', 'Uw', 'Dw']:
+                self.rotate_wide_oriented(move[0], direction)
+                if double:
+                    self.rotate_wide_oriented(move[0], direction)
+            else:
+                raise ValueError("Invalid move")
+           
+           
 
     def shuffle(self, num_moves=20):
         """
