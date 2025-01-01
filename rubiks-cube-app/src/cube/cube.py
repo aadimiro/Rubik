@@ -122,6 +122,26 @@ class Cube:
             raise ValueError("Invalid key")
         return face, direction
 
+    def get_slice_and_direction(self, key, counterclockwise_pressed):
+        """
+        Map key press to slice and direction.
+        Args:
+            key: The key pressed.
+            counterclockwise_pressed: Whether the counterclockwise key is pressed.
+        Returns:
+            A tuple of (slice, direction).
+        """
+        slice_map = {
+            'm': 'M',
+            'e': 'E',
+            's': 'S'
+        }
+        direction = 'counterclockwise' if counterclockwise_pressed else 'clockwise'
+        slice = slice_map.get(key.lower())
+        if slice is None:
+            raise ValueError("Invalid key")
+        return slice, direction
+
     def rotate(self, axis, direction):
         """
         Rotate the cube around the specified axis considering the cube current orientation.
@@ -279,6 +299,59 @@ class Cube:
         # Rotate the effective face
         self.rotate_face(effective_face, effective_direction)
 
+    def rotate_slice_oriented(self, slice, direction):
+        # This function performs M, E, and S moves by combining the rotation of two faces and a cube rotation,
+        # making use of the rotate_face_oriented and rotate functions.
+        
+        # Define the mapping of slice for clockwise
+        # M (clockwise) = L' + R + x'
+        # E (clockwise) = D' + U + y'
+        # S (clockwise) = F' + B + z'
+        slice_map = {
+            'M': [('L', 'counterclockwise'), ('R', 'clockwise'), ('x', 'counterclockwise')],
+            'E': [('D', 'counterclockwise'), ('U', 'clockwise'), ('y', 'counterclockwise')],
+            'S': [('F', 'counterclockwise'), ('B', 'clockwise'), ('z', 'clockwise')]
+        }
+
+        # Reverse the previous operations if direction is counterclockwise
+        if direction == 'counterclockwise':
+            slice_map = {k: [(face, 'counterclockwise' if dir == 'clockwise' else 'clockwise') for face, dir in v] for k, v in slice_map.items()}
+
+        # Perform operation in slice_map
+        for face, dir in slice_map[slice][:2]:
+            self.rotate_face_oriented(face, dir)
+        axis, dir = slice_map[slice][2]
+        self.rotate(axis, dir)
+            
+    def rotate_wide_oriented(self, wide, direction):
+        # This function performs Rw, Lw, Fw, Bw, Uw, and Dw moves by combining the rotation of two faces and a cube rotation,
+        # making use of the rotate_face_oriented and rotate_slice_oriented functions.
+        
+        # Define the mapping of wide for clockwise
+        # Rw (clockwise) = R + M' + x'
+        # Lw (clockwise) = L + M + x
+        # Fw (clockwise) = F + S' + z
+        # Bw (clockwise) = B + S + z'
+        # Uw (clockwise) = U + E + y
+        # Dw (clockwise) = D + E' + y'
+        wide_map = {
+            'R': [('R', 'clockwise'), ('M', 'counterclockwise')],
+            'L': [('L', 'clockwise'), ('M', 'clockwise')],
+            'F': [('F', 'clockwise'), ('S', 'clockwise')],
+            'B': [('B', 'clockwise'), ('S', 'counterclockwise')],
+            'U': [('U', 'clockwise'), ('E', 'counterclockwise')],
+            'D': [('D', 'clockwise'), ('E', 'clockwise')]
+        }
+
+        # Reverse the previous operations if direction is counterclockwise
+        if direction == 'counterclockwise':
+            wide_map = {k: [(face, 'counterclockwise' if dir == 'clockwise' else 'clockwise') for face, dir in v] for k, v in wide_map.items()}
+
+        face, dir = wide_map[wide][0]
+        self.rotate_face_oriented(face, dir)
+        slice, dir = wide_map[wide][1]
+        self.rotate_slice_oriented(slice, dir)
+        
 
     def shuffle(self, num_moves=20):
         """

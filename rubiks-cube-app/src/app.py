@@ -26,7 +26,8 @@ def handle_key_press():
         data = request.get_json()
         key = data.get('key')
         counterclockwise_pressed = data.get('counterclockwise', False)
-        print(f"Received key: {key}, counterclockwise: {counterclockwise_pressed}")  # Debugging
+        wide_pressed = data.get('wide', False)
+        print(f"Received key: {key}, counterclockwise: {counterclockwise_pressed}, wide: {wide_pressed}")  # Debugging
 
         if key in ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', '8', '2', '4', '6', '3', '7']:
             axis, direction = cube.get_axis_and_direction(key)
@@ -35,7 +36,14 @@ def handle_key_press():
         elif key.lower() in ['u', 'r', 'l', 'f', 'b', 'd']:  # Normalize key to lowercase
             face, direction = cube.get_face_and_direction(key, counterclockwise_pressed)
             print(f"Mapped to face: {face}, direction: {direction}")  # Debugging
-            cube.rotate_face_oriented(face, direction)
+            if wide_pressed:
+                cube.rotate_wide_oriented(face, direction)
+            else:
+                cube.rotate_face_oriented(face, direction)
+        elif key.lower() in ['m', 'e', 's']:  # Normalize key to lowercase
+            slice, direction = cube.get_slice_and_direction(key, counterclockwise_pressed)
+            print(f"Mapped to slice: {slice}, direction: {direction}")  # Debugging
+            cube.rotate_slice_oriented(slice, direction)
         else:
             raise ValueError("Invalid key")
 

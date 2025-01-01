@@ -157,6 +157,7 @@ const cube = new Cube();
 cube.fetchState();
 
 let counterclockwisePressed = false;
+let widePressed = false;
 
 document.addEventListener('keydown', function(event) {
     const key = event.key;
@@ -166,12 +167,17 @@ document.addEventListener('keydown', function(event) {
         return;
     }
 
+    if (key === "w" || key === "W") {
+        widePressed = true;
+        return;
+    }
+
     fetch('/cube/key-press', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ key: key, counterclockwise: counterclockwisePressed }),
+        body: JSON.stringify({ key: key, counterclockwise: counterclockwisePressed, wide: widePressed }),
     })
     .then(response => response.json())
     .then(data => {
@@ -190,6 +196,10 @@ document.addEventListener('keydown', function(event) {
 document.addEventListener('keyup', function(event) {
     if (event.key === "'" || event.key === "#") {
         counterclockwisePressed = false;
+    }
+
+    if (event.key === 'w' || event.key === 'W') {
+        widePressed = false;
     }
 });
 
