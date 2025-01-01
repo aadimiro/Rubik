@@ -53,8 +53,8 @@ rubiks-cube-app
 
 ## Future Enhancements
 
+- Implement learning mode to help beginners solve the cube
 - Implement solving algorithms in the `solver.py` file.
-- Add user authentication and save cube states.
 - Enhance the 3D rendering with more interactive features.
 
 ## License
