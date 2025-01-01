@@ -97,5 +97,14 @@ def cornertofish():
         print(f"Error executing Line to Fish: {e}")
         return jsonify({"error": str(e)}), 500
 
+@app.route('/cube/fishtoyellow', methods=['POST'])
+def fishtoyellow():
+    try:
+        cube.move_sequence("R U R' U R U2 R'")  # Call the method you want to execute
+        return jsonify(success=True, state=cube.get_state())
+    except Exception as e:
+        print(f"Error executing Line to Fish: {e}")
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True)

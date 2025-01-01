@@ -293,3 +293,24 @@ document.getElementById('CornerToFish').addEventListener('click', function() {
         console.error('Error:', error);
     });
 });
+
+document.getElementById('FishToYellow').addEventListener('click', function() {
+    fetch('/cube/fishtoyellow', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Corner to Fish executed');
+            cube.fetchState(); // Fetch the updated state and re-render the cube
+        } else {
+            console.error('Error:', data.error);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
