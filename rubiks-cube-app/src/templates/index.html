@@ -9,9 +9,12 @@
 </head>
 <body>
     <h1 class="title">Rubik's Cube</h1>
-    <button id="mixButton">Mix Cube</button>
+    <div class="button-container">
+        <button id="mixButton">Mix Cube</button>
+        <button id="executeButton">Execute Sequence</button>
+        <button id="SetSolved">Set Solved</button>
+    </div> 
     <input type="text" id="sequenceInput" maxlength="100" placeholder="Enter move sequence">
-    <button id="executeButton">Execute Sequence</button>
     <canvas id="cubeCanvas" width="400" height="400"></canvas>
     <div class="button-container">
         <button id="LineToFish" class="op-button">Line to fish</button>

@@ -208,26 +208,6 @@ document.addEventListener('keyup', function(event) {
     }
 });
 
-document.getElementById('mixButton').addEventListener('click', function() {
-    fetch('/cube/shuffle', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Shuffle sequence:', data.sequence);
-            cube.fetchState(); // Fetch the updated state and re-render the cube
-        } else {
-            console.error('Error:', data.error);
-        }
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-});
 
 document.getElementById('executeButton').addEventListener('click', function() {
     const sequence = document.getElementById('sequenceInput').value;
@@ -252,65 +232,40 @@ document.getElementById('executeButton').addEventListener('click', function() {
     });
 });
 
-document.getElementById('LineToFish').addEventListener('click', function() {
-    fetch('/cube/linetofish', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Line to Fish executed');
-            cube.fetchState(); // Fetch the updated state and re-render the cube
-        } else {
-            console.error('Error:', data.error);
-        }
-    })
-    .catch((error) => {
-        console.error('Error:', error);
+// Reusable function to handle button click events
+function handleButtonClick(buttonId, endpoint, successMessage, getPayload = null) {
+    document.getElementById(buttonId).addEventListener('click', function() {
+        const payload = getPayload ? getPayload() : {};
+        fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log(successMessage);
+                cube.fetchState(); // Fetch the updated state and re-render the cube
+            } else {
+                console.error('Error:', data.error);
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     });
-});
+}
 
-document.getElementById('CornerToFish').addEventListener('click', function() {
-    fetch('/cube/cornertofish', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Corner to Fish executed');
-            cube.fetchState(); // Fetch the updated state and re-render the cube
-        } else {
-            console.error('Error:', data.error);
-        }
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-});
+// Use the reusable function for the buttons
+handleButtonClick('mixButton', '/cube/shuffle', 'Shuffle executed');
+handleButtonClick('LineToFish', '/cube/linetofish', 'Line to Fish executed');
+handleButtonClick('CornerToFish', '/cube/cornertofish', 'Corner to Fish executed');
+handleButtonClick('FishToYellow', '/cube/fishtoyellow', 'Fish to Yellow executed');
+handleButtonClick('SetSolved', '/cube/setsolved', 'Set Solved executed');
 
-document.getElementById('FishToYellow').addEventListener('click', function() {
-    fetch('/cube/fishtoyellow', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Corner to Fish executed');
-            cube.fetchState(); // Fetch the updated state and re-render the cube
-        } else {
-            console.error('Error:', data.error);
-        }
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+// Use the reusable function for the "Execute Sequence" button with a payload
+handleButtonClick('executeButton', '/cube/execute-sequence', 'Executed sequence', () => {
+    return { sequence: document.getElementById('sequenceInput').value };
 });

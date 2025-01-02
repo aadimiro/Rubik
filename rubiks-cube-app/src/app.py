@@ -29,7 +29,7 @@ def handle_key_press():
         wide_pressed = data.get('wide', False)
         print(f"Received key: {key}, counterclockwise: {counterclockwise_pressed}, wide: {wide_pressed}")  # Debugging
 
-        if key in ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', '8', '2', '4', '6', '3', '7']:
+        if key in ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', '8', '2', '4', '6', '3', '7', '9', '1']:
             axis, direction = cube.get_axis_and_direction(key)
             print(f"Mapped to axis: {axis}, direction: {direction}")  # Debugging
             cube.rotate(axis, direction)
@@ -101,6 +101,15 @@ def cornertofish():
 def fishtoyellow():
     try:
         cube.move_sequence("R U R' U R U2 R'")  # Call the method you want to execute
+        return jsonify(success=True, state=cube.get_state())
+    except Exception as e:
+        print(f"Error executing Line to Fish: {e}")
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/cube/setsolved', methods=['POST'])
+def setsolved():
+    try:
+        cube.initialize_cube()     # Call the method you want to execute
         return jsonify(success=True, state=cube.get_state())
     except Exception as e:
         print(f"Error executing Line to Fish: {e}")

@@ -84,8 +84,10 @@ class Cube:
         key_map = {
             'ArrowUp': ('x', 'counterclockwise'),
             '8': ('x', 'counterclockwise'),
+            '9': ('x', 'counterclockwise'),
             'ArrowDown': ('x', 'clockwise'),
             '2': ('x', 'clockwise'),
+            '1': ('x', 'clockwise'),
             'ArrowLeft': ('y', 'counterclockwise'),
             '4': ('y', 'counterclockwise'),
             'ArrowRight': ('y', 'clockwise'),

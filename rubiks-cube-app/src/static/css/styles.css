@@ -33,7 +33,7 @@ canvas {
     font-size: 2em;
 }
 
-#mixButton, #executeButton {
+#mixButton, #executeButton, #SetSolved{
     margin: 10px;
 }
 
