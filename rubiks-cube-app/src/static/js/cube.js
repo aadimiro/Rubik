@@ -153,6 +153,92 @@ function animate() {
 }
 animate();
 
+// Function to animate a move
+function animateMove(face, direction) {
+    const duration = 500; // Duration of the animation in milliseconds
+    const startTime = performance.now();
+    const axis = getRotationAxis(face);
+    const angle = direction === 'clockwise' ? Math.PI / 2 : -Math.PI / 2;
+
+    // Create a group for the rotating cubies
+    const rotatingGroup = new THREE.Group();
+    rubiksCube.children.forEach(cubie => {
+        if (shouldRotateCubie(cubie, face)) {
+            rotatingGroup.add(cubie);
+        }
+    });
+    rubiksCube.add(rotatingGroup);
+
+    function rotateCubies(timestamp) {
+        const elapsed = timestamp - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const currentAngle = progress * angle;
+
+        // Rotate the group
+        rotatingGroup.rotation[axis] = currentAngle;
+
+        if (progress < 1) {
+            requestAnimationFrame(rotateCubies);
+        } else {
+            // Update the cube state after the animation is complete
+            cube.move_sequence(face + (direction === 'clockwise' ? '' : "'"));
+            cube.fetchState();
+
+            // Remove the group and re-add the cubies to the main group
+            rotatingGroup.children.forEach(cubie => {
+                rubiksCube.add(cubie);
+            });
+            rubiksCube.remove(rotatingGroup);
+        }
+    }
+
+    requestAnimationFrame(rotateCubies);
+}
+
+// Function to determine the rotation axis based on the face
+function getRotationAxis(face) {
+    switch (face) {
+        case 'U':
+        case 'D':
+            return 'y';
+        case 'L':
+        case 'R':
+            return 'x';
+        case 'F':
+        case 'B':
+            return 'z';
+    }
+}
+
+// Function to determine if a cubie should be rotated for a given face
+const tolerance = 0.01;
+
+function shouldRotateCubie(cubie, face) {
+    switch (face) {
+        case 'U':
+            return Math.abs(cubie.position.y - 1) < tolerance;
+        case 'D':
+            return Math.abs(cubie.position.y + 1) < tolerance;
+        case 'L':
+            return Math.abs(cubie.position.x + 1) < tolerance;
+        case 'R':
+            return Math.abs(cubie.position.x - 1) < tolerance;
+        case 'F':
+            return Math.abs(cubie.position.z - 1) < tolerance;
+        case 'B':
+            return Math.abs(cubie.position.z + 1) < tolerance;
+        default:
+            return false;
+    }
+}
+
+// Example usage: animate a clockwise rotation of the right face
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'r') {
+        animateMove('R', 'clockwise');
+    }
+});
+
 const cube = new Cube();
 cube.fetchState();
 
