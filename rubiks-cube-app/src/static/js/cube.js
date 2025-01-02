@@ -241,6 +241,8 @@ handleButtonClick('LineToFish', '/cube/linetofish', 'Line to Fish executed');
 handleButtonClick('CornerToFish', '/cube/cornertofish', 'Corner to Fish executed');
 handleButtonClick('FishToYellow', '/cube/fishtoyellow', 'Fish to Yellow executed');
 handleButtonClick('SetSolved', '/cube/setsolved', 'Set Solved executed');
+handleButtonClick('Rotate3Edges', '/cube/rotate3edges', 'Rotate 3 Edges executed');
+handleButtonClick('Rotate3Corners', '/cube/rotate3corners', 'Rotate 3 Corners executed');
 
 // Use the reusable function for the "Execute Sequence" button with a payload
 handleButtonClick('executeButton', '/cube/execute-sequence', 'Executed sequence', () => {

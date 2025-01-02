@@ -94,7 +94,7 @@ def cornertofish():
         cube.move_sequence("Fw R U R' U' Fw'")  # Call the method you want to execute
         return jsonify(success=True, state=cube.get_state())
     except Exception as e:
-        print(f"Error executing Line to Fish: {e}")
+        print(f"Error executing Corner to Fish: {e}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/cube/fishtoyellow', methods=['POST'])
@@ -103,7 +103,25 @@ def fishtoyellow():
         cube.move_sequence("R U R' U R U2 R'")  # Call the method you want to execute
         return jsonify(success=True, state=cube.get_state())
     except Exception as e:
-        print(f"Error executing Line to Fish: {e}")
+        print(f"Error executing Fish to yellow: {e}")
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/cube/rotate3edges', methods=['POST'])
+def rotate3edges():
+    try:
+        cube.move_sequence("R' U R' U' R' U' R' U R U R2")  # Call the method you want to execute
+        return jsonify(success=True, state=cube.get_state())
+    except Exception as e:
+        print(f"Error executing Rotate 3 Edges: {e}")
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/cube/rotate3corners', methods=['POST'])
+def rotate3corners():
+    try:
+        cube.move_sequence("R U' R D2 R' U R D2 R2")  # Call the method you want to execute
+        return jsonify(success=True, state=cube.get_state())
+    except Exception as e:
+        print(f"Error executing Rotate 3 Corners: {e}")
         return jsonify({"error": str(e)}), 500
     
 @app.route('/cube/setsolved', methods=['POST'])
