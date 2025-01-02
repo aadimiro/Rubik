@@ -282,22 +282,8 @@ class Cube:
                 max_dot = dot_product
                 effective_face = f
 
-        # Determine the effective direction
-        if face in ['U', 'D']:
-            if effective_face in ['F', 'B']:
-                effective_direction = 'clockwise' if direction == 'counterclockwise' else 'counterclockwise'
-            else:
-                effective_direction = 'counterclockwise' if direction == 'counterclockwise' else 'clockwise'
-        elif face in ['F', 'B']:
-            if effective_face in ['U', 'D']:
-                effective_direction = 'clockwise' if direction == 'counterclockwise' else 'counterclockwise'
-            else:
-                effective_direction = 'counterclockwise' if direction == 'counterclockwise' else 'clockwise'
-        else:
-            effective_direction = direction
-
         # Rotate the effective face
-        self.rotate_face(effective_face, effective_direction)
+        self.rotate_face(effective_face, direction)
 
     def rotate_slice_oriented(self, slice, direction):
         # This function performs M, E, and S moves by combining the rotation of two faces and a cube rotation,
