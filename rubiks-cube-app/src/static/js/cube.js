@@ -109,8 +109,6 @@ class Cube {
 
         return faceColors;
     }
-    
-   
 }
 
 const threeCanvas = document.getElementById('cubeCanvas');

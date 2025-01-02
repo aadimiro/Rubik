@@ -17,28 +17,7 @@ class Cube:
             'L': ['O'] * 9,  # Green (Left face)
             'R': ['R'] * 9   # Blue (Right face)
         }
-
         self.state = cube_state
-
-        # Perform a right face rotation clockwise
-        #self.rotate_face('U', 'clockwise')
-        #self.rotate_face_oriented('U', 'clockwise')
-        #self.rotate_face('R', 'clockwise')
-
-         #set all faces to R G B O W Y B R O
-        #for face in ['U', 'D', 'F', 'B', 'L', 'R']:
-        #    self.state[face] = ['R', 'G', 'B', 'O', 'W', 'Y', 'B', 'R', 'O']      
-
-        # Print all faces as text
-        #print("Initial state:")
-        #for face in ['U', 'D', 'F', 'B', 'L', 'R']:
-        #    print(f"{face} face:")
-        #    for i in range(0, 9, 3):
-        #        print(cube_state[face][i:i+3])
-
-        #self.move_sequence("Rw' Uw2 x")
-
-
         return self.state
     
 
@@ -158,7 +137,6 @@ class Cube:
         logging.debug(f"Rotation matrix for axis {axis} and angle {angle}:\n{rotation_mat}")
 
         # Update the orientation matrix
-        #self.orientation_matrix = np.dot(rotation_mat, self.orientation_matrix)
         self.orientation_matrix = np.dot(self.orientation_matrix,rotation_mat)
 
         logging.debug(f"Orientation matrix after:\n{self.orientation_matrix}")
