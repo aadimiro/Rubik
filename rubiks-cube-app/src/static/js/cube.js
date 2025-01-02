@@ -209,29 +209,6 @@ document.addEventListener('keyup', function(event) {
 });
 
 
-document.getElementById('executeButton').addEventListener('click', function() {
-    const sequence = document.getElementById('sequenceInput').value;
-    fetch('/cube/execute-sequence', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ sequence: sequence }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Executed sequence:', sequence);
-            cube.fetchState(); // Fetch the updated state and re-render the cube
-        } else {
-            console.error('Error:', data.error);
-        }
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-});
-
 // Reusable function to handle button click events
 function handleButtonClick(buttonId, endpoint, successMessage, getPayload = null) {
     document.getElementById(buttonId).addEventListener('click', function() {
