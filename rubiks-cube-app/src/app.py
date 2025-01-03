@@ -100,6 +100,30 @@ def execute_move_sequence(sequence):
 def execute_sequence():
     return execute_move_sequence(request.get_json().get('sequence'))
 
+@app.route('/cube/rotatecornerleft', methods=['POST'])
+def rotatecornerleft():
+    return execute_move_sequence("L' U2 L U")
+
+@app.route('/cube/rotatecornerright', methods=['POST'])
+def rotatecornerright():
+    return execute_move_sequence("R U2 R' U'")
+
+@app.route('/cube/insertcornerleft', methods=['POST'])
+def insertcornerleft():
+    return execute_move_sequence("L' U' L")
+
+@app.route('/cube/insertcornerright', methods=['POST'])
+def insertcornerright():
+    return execute_move_sequence("R U R'")
+
+@app.route('/cube/automoveleft', methods=['POST'])
+def automoveleft():
+    return execute_move_sequence("U' L' F U F'")
+
+@app.route('/cube/automoveright', methods=['POST'])
+def automoveright():
+    return execute_move_sequence("U R F' U' F")
+
 @app.route('/cube/linetofish', methods=['POST'])
 def linetofish():
     return execute_move_sequence("F R U R' U' F'")

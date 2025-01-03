@@ -19,7 +19,8 @@ canvas {
 #cubeCanvas {
     width: 400px;
     height: 400px;
-    border: 1px solid #000;
+    border: 1px solid #000000;
+    margin-top: 10px;
 }
 
 .parent-container {
@@ -33,9 +34,6 @@ canvas {
     font-size: 2em;
 }
 
-#mixButton, #executeButton, #SetSolved{
-    margin: 10px;
-}
 
 #sequenceInput {
     width: 400px; /* Set the width of the text field */
@@ -44,14 +42,28 @@ canvas {
     font-size: 0.7em; /* Adjust the font size */
 }
 
-.button-container {
+.button-container3 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
     margin-top: 10px;
 }
 
-.op-button {
-    padding: 5px;
+.button-container2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    margin-top: 10px;
+}
+
+#hintText {
+    margin: 0;
     font-size: 1em;
+    color: #000000;
+    background-color: rgb(153, 153, 153);
+    height: 5em; /* Set height to 5 lines */
+    width: 400px; /* Set width to 400px */
+    overflow-wrap: break-word; /* Break long words */
+    white-space: pre-wrap; /* Preserve whitespace and wrap text */
+    overflow: hidden; /* Hide overflow */
 }

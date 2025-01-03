@@ -93,7 +93,13 @@ export const EventHandler = {
         }
 
         // Use the reusable function for the buttons
-        handleButtonClick('mixButton', '/cube/shuffle', 'Shuffle executed');
+        handleButtonClick('mixButton', '/cube/shuffle', 'Shuffle executed');  
+        handleButtonClick('RotateCornerLeft', '/cube/rotatecornerleft', 'Rotate Corner Left executed');
+        handleButtonClick('RotateCornerRight', '/cube/rotatecornerright', 'Rotate Corner Right executed');
+        handleButtonClick('InsertCornerLeft', '/cube/insertcornerleft', 'Insert Corner Left executed');
+        handleButtonClick('InsertCornerRight', '/cube/insertcornerright', 'Insert Corner Right executed');
+        handleButtonClick('AutoMoveLeft', '/cube/automoveleft', 'Auto Move Left executed');
+        handleButtonClick('AutoMoveRight', '/cube/automoveright', 'Auto Move Right executed');
         handleButtonClick('LineToFish', '/cube/linetofish', 'Line to Fish executed');
         handleButtonClick('CornerToFish', '/cube/cornertofish', 'Corner to Fish executed');
         handleButtonClick('FishToYellow', '/cube/fishtoyellow', 'Fish to Yellow executed');
