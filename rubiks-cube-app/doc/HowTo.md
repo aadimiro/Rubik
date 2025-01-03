@@ -58,17 +58,16 @@ The application provides hints to guide you through solving the cube:
 
 ## Solving the Cube
 
-### Make a white cross
+### Make a White Cross
 You only need simple moves for this.
 
-#### Intended result:
-
+#### Intended Result:
 
 ![White Cross Side 1](whitecrossside1.png) 
 ![White Cross Side 2](whitecrossside2.png)
 
-### Complete the first layer
-#### Step 1 - Insert the corners
+### Complete the First Layer
+#### Step 1 - Insert the Corners
 ##### Example - Rotate Corner Right
 | Before | After |
 |--------|-------|
@@ -84,10 +83,10 @@ You only need simple moves for this.
 |--------|-------|
 | ![Insert Corner Right](InsertCornerRight.png) | ![Insert Corner Right Result](InsertCornerRightResult.png) |
 
-##### Example -  Insert Corner Left
+##### Example - Insert Corner Left
 | Before | After |
 |--------|-------|
-| ![Insert Corner Right](InsertCornerLeft.png) | ![Insert Corner Right Result](InsertCornerLeftResult.png) |
+| ![Insert Corner Left](InsertCornerLeft.png) | ![Insert Corner Left Result](InsertCornerLeftResult.png) |
 
 #### Step 2 - Insert Edges with Auto Move
 ##### Example - Insert Edge Right
@@ -98,16 +97,16 @@ You only need simple moves for this.
 ##### Example - Insert Edge Left
 | Before | After |
 |--------|-------|
-| ![Insert Edge Right](AutoMoveLeft.png) | ![Insert Edge Right Result](AutoMoveLeftResult.png) |
+| ![Insert Edge Left](AutoMoveLeft.png) | ![Insert Edge Left Result](AutoMoveLeftResult.png) |
 
 #### Intended Result:
 
-![First two layer](FirstToLayerside1.png)
-![First two layer](FirstToLayerside2.png)
+![First Two Layers](FirstTwoLayerside1.png)
+![First Two Layers](FirstTwoLayerside2.png)
 
-### Solve the last layer
+### Solve the Last Layer
 #### Step 1 - Line or Corner to Fish
-Hint: if you dont have a line or corner (i.e. you have only a dot), just make the Line to Fish move to get a Corner.
+Hint: If you don't have a line or corner (i.e., you have only a dot), just make the Line to Fish move to get a Corner.
 
 ##### Example - Line to Fish
 (The line must be central and horizontal, as in the picture)
@@ -126,54 +125,52 @@ Hint: if you dont have a line or corner (i.e. you have only a dot), just make th
 * With the **Fish to Yellow** move, you can get a yellow last layer out of Fish Type 1a.
 * For other Fish types, you can use the **Fish to Yellow** move to get the Fish Type 1a. Experiment a little bit! You may need to repeat the move several times until you learn it.
 
-| Type 1a | Type1b |
+| Type 1a | Type 1b |
 |--------|-------|
-| ![Corner to Fish](FishType1a.png) | ![Corner to Fish Result](FishType1b.png) |
+| ![Fish Type 1a](FishType1a.png) | ![Fish Type 1b](FishType1b.png) |
 
 | Type 2 | Type 3 |
 |--------|-------|
-| ![Corner to Fish](FishType2.png) | ![Corner to Fish Result](FishType3.png) |
+| ![Fish Type 2](FishType2.png) | ![Fish Type 3](FishType3.png) |
 
-| Type 4 | Type5 |
+| Type 4 | Type 5 |
 |--------|-------|
-| ![Corner to Fish](FishType4.png) | ![Corner to Fish Result](FishType5.png) |
+| ![Fish Type 4](FishType4.png) | ![Fish Type 5](FishType5.png) |
 
 | Type 6 | |
 |--------|-------|
-| ![Corner to Fish](FishType6.png) | |
+| ![Fish Type 6](FishType6.png) | |
 
-##### Example - Fish Type 1a to Yellow last layer
+##### Example - Fish Type 1a to Yellow Last Layer
 | Before | After |
 |--------|-------|
-| ![Corner to Fish](FishToYellow.png) | ![Corner to Fish Result](FishType1aToYellowResult.png) |
+| ![Fish Type 1a](FishToYellow.png) | ![Fish Type 1a to Yellow Result](FishType1aToYellowResult.png) |
 
-#### Step 3 - Orientate the Yellow Edges:
-* a) Rotate the upper layer to have one edge in the right position
-* b) Use the ** Rotate 3 edges ** move to rotate the remaining edges in clockwise direction. 
-* Depending on how the edges are initially, you may need to repeat the procedure (a and b)
+#### Step 3 - Orient the Yellow Edges:
+* a) Rotate the upper layer to have one edge in the right position.
+* b) Use the **Rotate 3 Edges** move to rotate the remaining edges in a clockwise direction. 
+* Depending on how the edges are initially, you may need to repeat the procedure (a and b).
 ##### Example - Rotate 3 Edges
-(The well oriented edge must be at front, as in the picture)
+(The well-oriented edge must be at the front, as in the picture)
 | Before | After |
 |--------|-------|
-| ![Corner to Fish](Rotate3Edges.png) | ![Corner to Fish Result](Rotate3EdgesResult.png) |
+| ![Rotate 3 Edges](Rotate3Edges.png) | ![Rotate 3 Edges Result](Rotate3EdgesResult.png) |
 
-#### Step 4 - Orientate the Yellow Corners:
-* Put the yellow face in front
-* Rotate the yellow (front) face to get one right oriented edge
-* a) Rotate the cube to put the right oriented edge front-left-up (if there is no right oriented edge, skip this and next step, you will need to repeat it later)
-* b) Rotate the upper layer to have one edge in the right position
-* c) Use the ** Rotate 3 corners ** move to rotate the remaining corners in counterclockwise direction. 
-* Depending on how the corners are initially, you may need to repeat the procedure (a, b and c)
+#### Step 4 - Orient the Yellow Corners:
+* Put the yellow face in front.
+* Rotate the yellow (front) face to get one correctly oriented edge.
+* a) Rotate the cube to put the correctly oriented edge front-left-up (if there is no correctly oriented edge, skip this and the next step; you will need to repeat it later).
+* b) Rotate the upper layer to have one edge in the right position.
+* c) Use the **Rotate 3 Corners** move to rotate the remaining corners in a counterclockwise direction. 
+* Depending on how the corners are initially, you may need to repeat the procedure (a, b, and c).
 
 ##### Example - Rotate 3 Corners
-(The well oriented corner must be at front-left-up, as in the picture)
+(The well-oriented corner must be at front-left-up, as in the picture)
 | Before | After |
 |--------|-------|
-| ![Corner to Fish](Rotate3Corners.png) | ![Corner to Fish Result](Rotate3CornersResult.png) |
-
+| ![Rotate 3 Corners](Rotate3Corners.png) | ![Rotate 3 Corners Result](Rotate3CornersResult.png) |
 
 **Congratulations, you have finished the cube!**
-
 
 ## Conclusion
 
