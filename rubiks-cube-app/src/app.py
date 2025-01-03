@@ -1,4 +1,10 @@
+import sys
+import os
+
 from flask import Flask, render_template, jsonify, request
+
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+
 from cube.cube import Cube
 
 app = Flask(__name__)
