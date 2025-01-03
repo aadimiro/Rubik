@@ -118,11 +118,11 @@ def insertcornerright():
 
 @app.route('/cube/automoveleft', methods=['POST'])
 def automoveleft():
-    return execute_move_sequence("U' L' F U F'")
+    return execute_move_sequence("U' L' U L U F U' F'")
 
 @app.route('/cube/automoveright', methods=['POST'])
 def automoveright():
-    return execute_move_sequence("U R F' U' F")
+    return execute_move_sequence("U R U' R' U' F' U F")
 
 @app.route('/cube/linetofish', methods=['POST'])
 def linetofish():

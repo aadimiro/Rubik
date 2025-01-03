@@ -17,6 +17,10 @@ export class Cube {
         console.log('Fetched orientation matrix:', this.orientationMatrix);
         this.saveState();
         this.render();
+        if (this.historyIndex > 0) {
+            this.updateHint(); // Update hint based on the new state
+        }
+        
     }
 
     async sendKeyPress(key) {
@@ -87,6 +91,7 @@ export class Cube {
             this.orientationMatrix = previousState.orientationMatrix;
             await this.setState(previousState.state, previousState.orientationMatrix);
             this.render();
+            this.updateHint(); // Update hint based on the new state
         }
     }
 
@@ -98,6 +103,7 @@ export class Cube {
             this.orientationMatrix = nextState.orientationMatrix;
             await this.setState(nextState.state, nextState.orientationMatrix);
             this.render();
+            this.updateHint(); // Update hint based on the new state
         }
     }
 
@@ -107,5 +113,83 @@ export class Cube {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ state, orientation: orientationMatrix })
         });
+    }
+
+    updateHint() {
+        const hintText = document.getElementById('hintText');
+        if (!this.isWhiteCross()) {
+            hintText.textContent = 'Hint: Make a white cross. You just need simple moves, give it a try!';
+        } else if (!this.isFirstLayerComplete()) {
+            hintText.textContent = 'Hint: Complete the first layer with white face. Use the [Rotate Corner ...] and ' +
+                                   '[Insert corner...] moves as help';
+        } else if (!this.isFirstTwoLayersComplete()) {
+            hintText.textContent = 'Hint: Complete the first two layers. Use the [Auto Move ...] moves as ' +
+                                   'help to insert the edges';
+        } else if (!this.isLastLayerYellow()) {
+            hintText.textContent = 'Hint: Complete the last yellow face. Use the [Line to fish ...] and ' +
+                                   '[Corner to fish ...] moves as help first to build a yellow fish. ' +
+                                   'Then the [Fish to yellow] move to get a yellow last layer';
+        } else if (!this.isLastLayerCorrect()) {
+            hintText.textContent = 'Hint: Solve the last layer. Use the [Rotate 3 edges ...] move first to ' +
+                                    'fix the edges, finally the [Rotate 3 corners ...] move fix the corners.' +
+                                    'Finally just rotate the last face to solve the cube';
+        } else {
+            hintText.textContent = 'Congratulations! You solved the cube!';
+        }
+    }
+
+    isWhiteCross() {
+        // Check if the white cross is present on the top face
+        const U = this.state.U;
+        return U[1] === 'W' && U[3] === 'W' && U[5] === 'W' && U[7] === 'W';
+    }
+
+    isFirstLayerComplete() {
+        // Check if the first layer with the white face is complete
+        const U = this.state.U;
+        const F = this.state.F;
+        const R = this.state.R;
+        const B = this.state.B;
+        const L = this.state.L;
+        return this.isWhiteCross() &&
+            U[0] === 'W' && U[2] === 'W' && U[6] === 'W' && U[8] === 'W' &&
+            F[8] === 'G' && F[6] === 'G' && 
+            R[8] === 'R' && R[6] === 'R' &&
+            B[8] === 'B' && B[6] === 'B' &&
+            L[6] === 'O' && L[6] === 'O' ;
+    }
+
+    isFirstTwoLayersComplete() {
+        // Check if the first two layers are complete
+        const F = this.state.F;
+        const R = this.state.R;
+        const B = this.state.B;
+        const L = this.state.L;
+        return this.isFirstLayerComplete() &&
+            F[5] === 'G' && F[7] === 'G' && 
+            R[5] === 'R' && R[7] === 'R' &&
+            B[5] === 'B' && B[7] === 'B' &&
+            L[5] === 'O' && L[7] === 'O' ;
+    }
+
+    isLastLayerYellow() {
+        // Check if the last layer has a yellow face
+        const D = this.state.D;
+        return this.isFirstTwoLayersComplete() &&
+            D[0] === 'Y' && D[2] === 'Y' && D[6] === 'Y' && D[8] === 'Y' &&
+            D[1] === 'Y' && D[3] === 'Y' && D[5] === 'Y' && D[7] === 'Y';
+    }
+
+    isLastLayerCorrect() {
+        // Check if the last layer is solved
+        const F = this.state.F;
+        const R = this.state.R;
+        const B = this.state.B;
+        const L = this.state.L;
+        return this.isLastLayerYellow() &&
+            F[0] === 'G' && F[1] === 'G' && F[2] === 'G' && 
+            R[0] === 'R' && R[1] === 'R' && R[2] === 'R' &&
+            B[0] === 'B' && B[1] === 'B' && B[2] === 'B' &&
+            L[0] === 'O' && L[1] === 'O' && L[2] === 'O';
     }
 }
