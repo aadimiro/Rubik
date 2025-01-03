@@ -111,6 +111,78 @@ export const EventHandler = {
         handleButtonClick('executeButton', '/cube/execute-sequence', 'Executed sequence', () => {
             return { sequence: document.getElementById('sequenceInput').value };
         });
+        handleButtonClick('RotateU', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "U" };
+        });
+        handleButtonClick('RotateUcc', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "U'" };
+        });
+        handleButtonClick('RotateD', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "D" };
+        });
+        handleButtonClick('RotateDcc', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "D'" };
+        });
+        handleButtonClick('RotateL', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "L" };
+        });
+        handleButtonClick('RotateLcc', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "L'" };
+        });
+        handleButtonClick('RotateR', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "R" };
+        });
+        handleButtonClick('RotateRcc', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "R'" };
+        });
+        handleButtonClick('RotateF', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "F" };
+        });
+        handleButtonClick('RotateFcc', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "F'" };
+        });
+        handleButtonClick('RotateB', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "B" };
+        });
+        handleButtonClick('RotateBcc', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "B'" };
+        });
+        handleButtonClick('RotateM', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "M" };
+        });
+        handleButtonClick('RotateMcc', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "M'" };
+        });
+        handleButtonClick('RotateE', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "E" };
+        });
+        handleButtonClick('RotateEcc', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "E'" };
+        });
+        handleButtonClick('RotateS', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "S" };
+        });
+        handleButtonClick('RotateScc', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "S'" };
+        });
+        handleButtonClick('Rotatex', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "x" };
+        });
+        handleButtonClick('Rotatexcc', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "x'" };
+        });
+        handleButtonClick('Rotatey', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "y" };
+        });
+        handleButtonClick('Rotateycc', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "y'" };
+        });
+        handleButtonClick('Rotatez', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "z" };
+        });
+        handleButtonClick('Rotatezcc', '/cube/execute-sequence', 'Executed sequence', () => {
+            return { sequence: "z'" };
+        });
 
         // Add Undo and Redo button listeners
         document.getElementById('undoButton').addEventListener('click', function() {
