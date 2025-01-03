@@ -2,6 +2,9 @@
 
 This project is a web application that allows users to interact with a 3D representation of a Rubik's Cube. Users can mix and manipulate the cube, with plans to implement solving functionality in future updates.
 
+Try the app online: [Rubik's Cube Web Application](https://rubiks-cube-app-omega.vercel.app/)
+
+
 ## Project Structure
 
 ```
