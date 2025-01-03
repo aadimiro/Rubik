@@ -17,8 +17,8 @@ canvas {
 }
 
 #cubeCanvas {
-    width: 400px;
-    height: 400px;
+    width: 350px;
+    height: 350px;
     border: 1px solid #000000;
     margin-top: 10px;
 }
@@ -41,7 +41,7 @@ canvas {
 }
 
 #sequenceInput {
-    width: 400px; /* Set the width of the text field */
+    width: 350px; /* Set the width of the text field */
     padding: 10px; /* Add some padding for better appearance */
     margin: 10px 0; /* Add some margin for spacing */
     font-size: 0.7em; /* Adjust the font size */
@@ -67,7 +67,7 @@ canvas {
     color: #000000;
     background-color: rgb(153, 153, 153);
     height: 5em; /* Set height to 5 lines */
-    width: 400px; /* Set width to 400px */
+    width: 350px; /* Set width to 400px */
     overflow-wrap: break-word; /* Break long words */
     white-space: pre-wrap; /* Preserve whitespace and wrap text */
     overflow: hidden; /* Hide overflow */
@@ -75,7 +75,7 @@ canvas {
 }
 
 /* Media query for smartphones */
-@media (max-width: 400px) {
+@media (max-width: 350px) {
     body {
         justify-content: flex-start;
         padding: 10px;
