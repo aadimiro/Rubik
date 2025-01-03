@@ -73,3 +73,21 @@ canvas {
     overflow: hidden; /* Hide overflow */
     padding: 10px; /* Add padding to the border */
 }
+
+/* Media query for smartphones */
+@media (max-width: 400px) {
+    body {
+        justify-content: flex-start;
+        padding: 10px;
+    }
+
+    #cubeCanvas {
+        width: 90vw;
+        height: 90vw;
+        margin-top: 10px;
+    }
+
+    .title {
+        font-size: 1.5em;
+    }
+}
