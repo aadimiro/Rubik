@@ -12,6 +12,17 @@ def index():
 def get_cube_state():
     return jsonify(cube.get_state())
 
+
+@app.route('/cube/set-state', methods=['POST'])
+def set_cube_state():
+    data = request.get_json()
+    state = {
+        'state': data['state'],
+        'orientation': data['orientation']
+    }
+    cube.set_state(state)
+    return jsonify(success=True)
+
 @app.route('/cube/key-press', methods=['POST'])
 def handle_key_press():
     try:
@@ -47,7 +58,6 @@ def handle_key_press():
         print(f"Error processing key press: {e}")
         return jsonify({"error": str(e)}), 500
 
-
 @app.route('/cube/shuffle', methods=['POST'])
 def shuffle_cube():
     try:
@@ -56,7 +66,6 @@ def shuffle_cube():
     except Exception as e:
         print(f"Error shuffling cube: {e}")
         return jsonify({"error": str(e)}), 500
-    
 
 @app.route('/cube/rotate', methods=['POST'])
 def rotate_cube():
@@ -110,7 +119,6 @@ def rotate3edges():
 @app.route('/cube/rotate3corners', methods=['POST'])
 def rotate3corners():
     return execute_move_sequence("R U' R D2 R' U R D2 R2")
-    
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -9,6 +9,10 @@
 <body>
     <h1 class="title">Rubik's Cube</h1>
     <div class="button-container">
+        <button id="undoButton">Undo</button>
+        <button id="redoButton">Redo</button>
+    </div> 
+    <div class="button-container">
         <button id="mixButton">Mix Cube</button>
         <button id="executeButton">Execute Sequence</button>
         <button id="SetSolved">Set Solved</button>
@@ -21,17 +25,6 @@
         <button id="FishToYellow" title= "R U R' U R U2 R'" class="op-button">Fish to yellow</button>
         <button id="Rotate3Edges" title="R' U R' U' R' U' R' U R U R2" class="op-button">Rotate 3 edges</button>
         <button id="Rotate3Corners" title="R U' R D2 R' U R D2 R2" class="op-button">Rotate 3 corners</button>
-        <button class="op-button">Op. 5</button>
-        <button class="op-button">Op. 6</button>
-        <button class="op-button">Op. 7</button>
-        <button class="op-button">Op. 8</button>
-        <button class="op-button">Op. 9</button>
-        <button class="op-button">Op. 10</button>
-        <button class="op-button">Op. 11</button>
-        <button class="op-button">Op. 12</button>
-        <button class="op-button">Op. 13</button>
-        <button class="op-button">Op. 14</button>
-        <button class="op-button">Op. 15</button>
     </div>
     <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>

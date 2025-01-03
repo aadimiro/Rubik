@@ -20,6 +20,16 @@ export const EventHandler = {
                 widePressed = true;
                 return;
             }
+
+            if (key === 'z' && (event.ctrlKey || event.metaKey)) {
+                cube.undo();
+                return;
+            }
+
+            if (key === 'y' && (event.ctrlKey || event.metaKey)) {
+                cube.redo();
+                return;
+            }
         
             fetch('/cube/key-press', {
                 method: 'POST',
@@ -94,6 +104,15 @@ export const EventHandler = {
         // Use the reusable function for the "Execute Sequence" button with a payload
         handleButtonClick('executeButton', '/cube/execute-sequence', 'Executed sequence', () => {
             return { sequence: document.getElementById('sequenceInput').value };
+        });
+
+        // Add Undo and Redo button listeners
+        document.getElementById('undoButton').addEventListener('click', function() {
+            cube.undo();
+        });
+
+        document.getElementById('redoButton').addEventListener('click', function() {
+            cube.redo();
         });
     }
 };
