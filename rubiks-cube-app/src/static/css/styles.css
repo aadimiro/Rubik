@@ -34,6 +34,11 @@ canvas {
     font-size: 2em;
 }
 
+.subtitle {
+    text-align: center;
+    font-size: 0.8em;
+    margin-top: 5px;
+}
 
 #sequenceInput {
     width: 400px; /* Set the width of the text field */
