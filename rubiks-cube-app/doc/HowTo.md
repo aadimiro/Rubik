@@ -48,8 +48,16 @@ The application provides hints to guide you through solving the cube:
 3. **Complete the First Two Layers**: After completing the first layer, the hint will guide you to complete the first two layers.
 4. **Solve the Cube**: Finally, the hint will guide you to solve the entire cube.
 
-## Example Move Sequences
+### More complex moves
 
+Here are the more complex moves you can perform using the buttons in the application:
+
+- **Rotate Corner Left**: `L' U2 L U`
+- **Rotate Corner Right**: `R U2 R' U'`
+- **Insert Corner Left**: `L' U' L`
+- **Insert Corner Right**: `R U R'`
+- **Auto Move Left**: `U' L' U L U F U' F''`
+- **Auto Move Right**: `U R U' R' U' F' U F`
 - **Line to Fish**: `F R U R' U' F'`
 - **Corner to Fish**: `Fw R U R' U' Fw'`
 - **Fish to Yellow**: `R U R' U R U2 R'`
