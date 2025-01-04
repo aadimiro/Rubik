@@ -111,7 +111,8 @@ export const EventHandler = {
         // Function to handle the sequence of moves
         function handleSequenceButtonClick(buttonId, endpoint, successMessage) {
             document.getElementById(buttonId).addEventListener('click', function() {
-                const sequence = document.getElementById('sequenceInput').value.split(' ');
+                let sequence = document.getElementById('sequenceInput').value.split(' ');
+                sequence = sequence.flatMap(move => move.endsWith('2') ? [move[0], move[0]] : [move]);
                 sequence.forEach((move, index) => {
                     setTimeout(() => {
                         fetch(endpoint, {
@@ -131,7 +132,6 @@ export const EventHandler = {
                             if (data.success) {
                                 console.log(`Executed move: ${move}`);
                                 animateMove(move); // Animate the move
-                                //cube.fetchState(); // Fetch the updated state and re-render the cube
                             } else {
                                 console.error('Error:', data.error);
                             }

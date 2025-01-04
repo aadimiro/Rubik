@@ -55,9 +55,6 @@ export const Renderer = {
         this.animationProgress = 0;
         this.currentMove = move;
     
-        // Stop the rendering loop
-        this.renderingEnabled = false;
-    
         // Store the original positions of the cubies
         this.originalPositions = this.rubiksCube.children.map(cubie => cubie.position.clone());
     },
@@ -100,8 +97,7 @@ export const Renderer = {
         const direction = this.currentMove.includes("'") 
             ? (counterclockwiseMoves.includes(mainmovecomponent) ? 1 : -1) 
             : (counterclockwiseMoves.includes(mainmovecomponent) ? -1 : 1);
-        const double = this.currentMove.includes("2");
-        this.pivot.rotation[axis] = angle * direction * (double ? 2 : 1);
+        this.pivot.rotation[axis] = angle * direction;
     
         // Cleanup after animation completes
         if (!this.animating) {
