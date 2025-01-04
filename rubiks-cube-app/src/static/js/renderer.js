@@ -54,6 +54,12 @@ export const Renderer = {
         this.animating = true;
         this.animationProgress = 0;
         this.currentMove = move;
+    
+        // Stop the rendering loop
+        this.renderingEnabled = false;
+    
+        // Store the original positions of the cubies
+        this.originalPositions = this.rubiksCube.children.map(cubie => cubie.position.clone());
     },
     updateAnimation(delta) {
         if (!this.animating) return;
@@ -92,13 +98,15 @@ export const Renderer = {
         // Moves which are default clockwise: L D B Lw Dw Bw M E
         const counterclockwiseMoves = ['R', 'U', 'F', 'Rw', 'Uw', 'Fw', 'S', 'x', 'y', 'z'];
         const direction = this.currentMove.includes("'") 
-            ? (counterclockwiseMoves.includes(this.currentMove) ? 1 : -1) 
-            : (counterclockwiseMoves.includes(this.currentMove) ? -1 : 1);
+            ? (counterclockwiseMoves.includes(mainmovecomponent) ? 1 : -1) 
+            : (counterclockwiseMoves.includes(mainmovecomponent) ? -1 : 1);
         const double = this.currentMove.includes("2");
         this.pivot.rotation[axis] = angle * direction * (double ? 2 : 1);
     
         // Cleanup after animation completes
         if (!this.animating) {
+
+            
             // Reset cubies back to the main rubiksCube object
             while (this.pivot.children.length) {
                 const cubie = this.pivot.children[0];
@@ -108,7 +116,15 @@ export const Renderer = {
             // Remove the pivot from the scene
             this.scene.remove(this.pivot);
             this.pivot = null;
+
+            // Reset cubies back to their original positions
+            this.rubiksCube.children.forEach((cubie, index) => {
+            cubie.position.copy(this.originalPositions[index]);
+            });
     
+            // Update the state immediately after resetting positions
+            this.cube.fetchState();
+            
         }
     },
     getCubiesToRotate(move) {

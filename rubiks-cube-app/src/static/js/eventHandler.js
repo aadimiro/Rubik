@@ -74,9 +74,9 @@ export const EventHandler = {
         });
         
         // Add button click listeners
-        this.setupButtons(cube);
+        this.setupButtons(cube,animateMove);
     },
-    setupButtons(cube) {
+    setupButtons(cube,animateMove) {
         // Reusable function to handle button click events
         function handleButtonClick(buttonId, endpoint, successMessage, getPayload = null) {
             document.getElementById(buttonId).addEventListener('click', function() {
@@ -88,7 +88,12 @@ export const EventHandler = {
                     },
                     body: JSON.stringify(payload),
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.success) {
                         console.log(successMessage);
@@ -99,6 +104,42 @@ export const EventHandler = {
                 })
                 .catch((error) => {
                     console.error('Error:', error);
+                });
+            });
+        }
+
+        // Function to handle the sequence of moves
+        function handleSequenceButtonClick(buttonId, endpoint, successMessage) {
+            document.getElementById(buttonId).addEventListener('click', function() {
+                const sequence = document.getElementById('sequenceInput').value.split(' ');
+                sequence.forEach((move, index) => {
+                    setTimeout(() => {
+                        fetch(endpoint, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ sequence: move }),
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                console.log(`Executed move: ${move}`);
+                                animateMove(move); // Animate the move
+                                //cube.fetchState(); // Fetch the updated state and re-render the cube
+                            } else {
+                                console.error('Error:', data.error);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                    }, index * 5000); // Adjust the delay as needed
                 });
             });
         }
@@ -118,10 +159,9 @@ export const EventHandler = {
         handleButtonClick('Rotate3Edges', '/cube/rotate3edges', 'Rotate 3 Edges executed');
         handleButtonClick('Rotate3Corners', '/cube/rotate3corners', 'Rotate 3 Corners executed');
 
-        // Use the reusable function for the "Execute Sequence" button with a payload
-        handleButtonClick('executeButton', '/cube/execute-sequence', 'Executed sequence', () => {
-            return { sequence: document.getElementById('sequenceInput').value };
-        });
+        // Use the new function for the "Execute Sequence" button
+        handleSequenceButtonClick('executeButton', '/cube/execute-sequence', 'Executed sequence');
+
         handleButtonClick('RotateU', '/cube/execute-sequence', 'Executed sequence', () => {
             return { sequence: "U" };
         });
