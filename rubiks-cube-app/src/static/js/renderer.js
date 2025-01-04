@@ -49,11 +49,12 @@ export const Renderer = {
             this.logMatrix(matrix);
         }
     },
-    animateMove(move) {
+    animateMove(move, callback) {
         if (this.animating) return;
         this.animating = true;
         this.animationProgress = 0;
         this.currentMove = move;
+        this.animationCallback = callback;
     
         // Store the original positions of the cubies
         this.originalPositions = this.rubiksCube.children.map(cubie => cubie.position.clone());
@@ -119,8 +120,13 @@ export const Renderer = {
             });
     
             // Update the state immediately after resetting positions
-            this.cube.fetchState();
-            
+            this.cube.fetchState().then(() => {
+                // Trigger the callback if provided
+                if (this.animationCallback) {
+                    this.animationCallback();
+                    this.animationCallback = null; // Clear the callback
+                }
+            });
         }
     },
     getCubiesToRotate(move) {

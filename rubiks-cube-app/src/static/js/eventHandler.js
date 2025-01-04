@@ -113,34 +113,38 @@ export const EventHandler = {
             document.getElementById(buttonId).addEventListener('click', function() {
                 let sequence = document.getElementById('sequenceInput').value.split(' ');
                 sequence = sequence.flatMap(move => move.endsWith('2') ? [move[0], move[0]] : [move]);
-                sequence.forEach((move, index) => {
-                    setTimeout(() => {
-                        fetch(endpoint, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ sequence: move }),
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error(`HTTP error! status: ${response.status}`);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data.success) {
-                                console.log(`Executed move: ${move}`);
-                                animateMove(move); // Animate the move
-                            } else {
-                                console.error('Error:', data.error);
-                            }
-                        })
-                        .catch((error) => {
-                            console.error('Error:', error);
-                        });
-                    }, index * 5000); // Adjust the delay as needed
-                });
+        
+                const executeMove = (index) => {
+                    if (index >= sequence.length) return; // End of sequence
+        
+                    const move = sequence[index];
+                    fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ sequence: move }),
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            console.log(`Executed move: ${move}`);
+                            animateMove(move, () => executeMove(index + 1)); // Animate the move and trigger the next move
+                        } else {
+                            console.error('Error:', data.error);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+                };
+        
+                executeMove(0); // Start the sequence
             });
         }
 
