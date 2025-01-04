@@ -30,17 +30,6 @@ export const EventHandler = {
                 cube.redo();
                 return;
             }
-
-            if (key === ' ') {
-                const moves = ["R", "L", "U", "D", "F", "B", "Rw", "Lw", "Uw", "Dw", "Fw", "Bw", "M", "E", "S", "x", "y", "z", "R2", "L2", "U2", "D2", "F2", "B2", "Rw2", "Lw2", "Uw2", "Dw2", "Fw2", "Bw2", "M2", "E2", "S2", "x2", "y2", "z2"];
-                if (typeof EventHandler.moveIndex === 'undefined') {
-                    EventHandler.moveIndex = 0; 
-                }
-
-                animateMove(moves[EventHandler.moveIndex]);
-                EventHandler.moveIndex = (EventHandler.moveIndex + 1) % moves.length;
-                return;
-            }
         
             fetch('/cube/key-press', {
                 method: 'POST',
@@ -54,6 +43,7 @@ export const EventHandler = {
                 if (data.success) {
                     console.log('Cube state:', data.state);
                     cube.fetchState(); // Fetch the updated state and re-render the cube
+                    animateMove(key.toUpperCase()); // Trigger animation for the move
                 } else {
                     console.error('Error:', data.error);
                 }
@@ -74,9 +64,9 @@ export const EventHandler = {
         });
         
         // Add button click listeners
-        this.setupButtons(cube);
+        this.setupButtons(cube, animateMove);
     },
-    setupButtons(cube) {
+    setupButtons(cube, animateMove) {
         // Reusable function to handle button click events
         function handleButtonClick(buttonId, endpoint, successMessage, getPayload = null) {
             document.getElementById(buttonId).addEventListener('click', function() {
@@ -92,7 +82,10 @@ export const EventHandler = {
                 .then(data => {
                     if (data.success) {
                         console.log(successMessage);
-                        cube.fetchState(); // Fetch the updated state and re-render the cube
+                        cube.fetchState().then(() => {
+                            const sequence = payload.sequence ? payload.sequence.split(' ') : [buttonId];
+                            animateSequence(sequence, animateMove);
+                        });
                     } else {
                         console.error('Error:', data.error);
                     }
@@ -205,3 +198,14 @@ export const EventHandler = {
         });
     }
 };
+
+function animateSequence(sequence, animateMove) {
+    if (sequence.length === 0) return;
+
+    const move = sequence.shift();
+    animateMove(move);
+
+    setTimeout(() => {
+        animateSequence(sequence, animateMove);
+    }, 500); // Adjust the delay as needed for smooth animation
+}

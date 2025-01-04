@@ -58,7 +58,7 @@ export const Renderer = {
     updateAnimation(delta) {
         if (!this.animating) return;
     
-        const speed = Math.PI / 2; // Rotation speed in radians per second
+        const speed = Math.PI ; // Rotation speed in radians per second
         this.animationProgress += delta * speed;
     
         if (this.animationProgress >= Math.PI / 2) {
@@ -69,21 +69,33 @@ export const Renderer = {
         // Calculate the current rotation angle
         const angle = this.animationProgress;
     
+        // Extract the main move component from the move string. This are R, L, U, D, F, B, M, E, S, x, y, z, Rw, Lw, Uw, Dw, Fw, Bw.
+        // I.e. we need to remove any ' or 2 from the move string to get the main move component.
+        const mainmovecomponent = this.currentMove.replace(/['2]/g, '');
+
         // Persistent pivot for the right face
         if (!this.pivot) {
             this.pivot = new THREE.Object3D();
             this.scene.add(this.pivot);
     
             // Find all cubies that belong to the right face and add them to the pivot
-            const cubiesToRotate = this.getCubiesToRotate(this.currentMove);
+            const cubiesToRotate = this.getCubiesToRotate(mainmovecomponent);
             cubiesToRotate.forEach(cubie => {
                 this.pivot.add(cubie);
             });
         }
     
         // Apply rotation to the pivot
-        const axis = this.getRotationAxis(this.currentMove);
-        this.pivot.rotation[axis] = angle;
+        const axis = this.getRotationAxis(mainmovecomponent);
+
+        // Moves which are default counterclockwise: R U F Rw Uw Fw S x y z
+        // Moves which are default clockwise: L D B Lw Dw Bw M E
+        const counterclockwiseMoves = ['R', 'U', 'F', 'Rw', 'Uw', 'Fw', 'S', 'x', 'y', 'z'];
+        const direction = this.currentMove.includes("'") 
+            ? (counterclockwiseMoves.includes(this.currentMove) ? 1 : -1) 
+            : (counterclockwiseMoves.includes(this.currentMove) ? -1 : 1);
+        const double = this.currentMove.includes("2");
+        this.pivot.rotation[axis] = angle * direction * (double ? 2 : 1);
     
         // Cleanup after animation completes
         if (!this.animating) {
@@ -140,55 +152,30 @@ export const Renderer = {
                 return [];
         }
     },
-    getPivotPosition(move) {
-        switch (move) {
-            case 'R':
-            case 'L':
-            case 'M':
-            case 'x':
-            case 'Rw':
-            case 'Lw':
-            return 1; // Center of the right, left, middle slice along x-axis, cube for x rotation, wide right, or wide left face
-            case 'U':
-            case 'D':
-            case 'E':
-            case 'y':
-            case 'Uw':
-            case 'Dw':
-            return 0; // Center of the up, down, middle slice along y-axis, cube for y rotation, wide up, or wide down face
-            case 'F':
-            case 'B':
-            case 'S':
-            case 'z':
-            case 'Fw':
-            case 'Bw':
-            return 0; // Center of the front, back, middle slice along z-axis, cube for z rotation, wide front, or wide back face
-            default:
-            return 0;
-        }
-    },
     getRotationAxis(move) {
         switch (move) {
             case 'R':
             case 'L':
-            case 'M':
-            case 'x':
             case 'Rw':
             case 'Lw':
+            case 'M':
+            case 'x':
+                return 'x';            
+            case 'x':
                 return 'x';
             case 'U':
             case 'D':
             case 'E':
-            case 'y':
             case 'Uw':
             case 'Dw':
+            case 'y':
                 return 'y';
             case 'F':
             case 'B':
-            case 'S':
-            case 'z':
             case 'Fw':
             case 'Bw':
+            case 'S':
+            case 'z':
                 return 'z';
             default:
                 return 'x';
