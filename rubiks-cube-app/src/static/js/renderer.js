@@ -6,6 +6,8 @@ export const Renderer = {
         this.camera = camera;
         this.rubiksCube = rubiksCube;
         this.cube = cube; // Store the Cube instance
+        this.animating = false;
+        this.animationProgress = 0;
     },
     updateCubeState(state, orientationMatrix) {
         // Update cube rendering based on state and orientation
@@ -47,21 +49,65 @@ export const Renderer = {
             this.logMatrix(matrix);
         }
     },
+    animateRightFace() {
+        if (this.animating) return;
+        this.animating = true;
+        this.animationProgress = 0;
+    },
+    updateAnimation(delta) {
+        if (!this.animating) return;
+    
+        const speed = Math.PI / 2; // Rotation speed in radians per second
+        this.animationProgress += delta * speed;
+    
+        if (this.animationProgress >= Math.PI / 2) {
+            this.animationProgress = Math.PI / 2;
+            this.animating = false;
+        }
+    
+        // Calculate the current rotation angle
+        const angle = this.animationProgress;
+    
+        // Persistent pivot for the right face
+        if (!this.pivot) {
+            this.pivot = new THREE.Object3D();
+            this.scene.add(this.pivot);
+    
+            // Find all cubies that belong to the right face and add them to the pivot
+            const rightFaceCubies = this.rubiksCube.children.filter(cubie => cubie.position.x > 0.9);
+            rightFaceCubies.forEach(cubie => {
+                this.pivot.add(cubie);
+            });
+        }
+    
+        // Apply rotation to the pivot
+        this.pivot.rotation.x = angle;
+    
+        // Cleanup after animation completes
+        if (!this.animating) {
+            // Reset cubies back to the main rubiksCube object
+            while (this.pivot.children.length) {
+                const cubie = this.pivot.children[0];
+                this.rubiksCube.add(cubie);
+            }
+    
+            // Remove the pivot from the scene
+            this.scene.remove(this.pivot);
+            this.pivot = null;
+    
+        }
+    },    
     isValidMatrix(matrix) {
         // Check if the matrix contains valid numbers
         for (let i = 0; i < 16; i++) {
-            if (!isFinite(matrix.elements[i])) {
+            if (isNaN(matrix.elements[i])) {
                 return false;
             }
         }
         return true;
     },
     logMatrix(matrix) {
-        // Log the matrix values for debugging
-        console.log('Matrix values:');
-        for (let i = 0; i < 16; i++) {
-            console.log(`matrix.elements[${i}]: ${matrix.elements[i]}`);
-        }
+        console.log('Matrix:', matrix.elements);
     }
 };
 

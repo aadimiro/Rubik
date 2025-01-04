@@ -1,5 +1,5 @@
 export const EventHandler = {
-    init(cube) {
+    init(cube, animateRightFace) {
         let counterclockwisePressed = false;
         let widePressed = false;
         
@@ -28,6 +28,11 @@ export const EventHandler = {
 
             if (key === 'y' && (event.ctrlKey || event.metaKey)) {
                 cube.redo();
+                return;
+            }
+
+            if (key === ' ') {
+                animateRightFace();
                 return;
             }
         
