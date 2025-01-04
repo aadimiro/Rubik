@@ -59,7 +59,9 @@ export const Renderer = {
         // Store the original positions and rotations of the cubies
         this.originalTransforms = this.rubiksCube.children.map(cubie => ({
             position: cubie.position.clone(),
-            rotation: cubie.rotation.clone()
+            rotation: cubie.rotation.clone(),
+            scale: cubie.scale.clone(),
+            quaternion: cubie.quaternion.clone()
         }));
 
     },
@@ -77,32 +79,34 @@ export const Renderer = {
         // Calculate the current rotation angle
         const angle = this.animationProgress;
     
-        // Extract the main move component from the move string. This are R, L, U, D, F, B, M, E, S, x, y, z, Rw, Lw, Uw, Dw, Fw, Bw.
-        // I.e. we need to remove any ' or 2 from the move string to get the main move component.
-        const mainmovecomponent = this.currentMove.replace(/['2]/g, '');
+
 
         // Persistent pivot for the right face
         if (!this.pivot) {
             this.pivot = new THREE.Object3D();
             this.scene.add(this.pivot);
-    
+
+            // Extract the main move component from the move string. This are R, L, U, D, F, B, M, E, S, x, y, z, Rw, Lw, Uw, Dw, Fw, Bw.
+            // I.e. we need to remove any ' or 2 from the move string to get the main move component.
+            this.mainmovecomponent = this.currentMove.replace(/['2]/g, '');
+
+            // Moves which are default counterclockwise: R U F Rw Uw Fw S x y z
+            // Moves which are default clockwise: L D B Lw Dw Bw M E
+            const counterclockwiseMoves = ['R', 'U', 'F', 'Rw', 'Uw', 'Fw', 'S', 'x', 'y', 'z'];
+            this.direction = this.currentMove.includes("'") 
+            ? (counterclockwiseMoves.includes(this.mainmovecomponent) ? 1 : -1) 
+            : (counterclockwiseMoves.includes(this.mainmovecomponent) ? -1 : 1);
+                    // Apply rotation to the pivot
+            this.axis = this.getRotationAxis(this.mainmovecomponent);
+
             // Find all cubies that belong to the right face and add them to the pivot
-            const cubiesToRotate = this.getCubiesToRotate(mainmovecomponent);
+            const cubiesToRotate = this.getCubiesToRotate(this.mainmovecomponent);
             cubiesToRotate.forEach(cubie => {
                 this.pivot.add(cubie);
             });
         }
     
-        // Apply rotation to the pivot
-        const axis = this.getRotationAxis(mainmovecomponent);
-
-        // Moves which are default counterclockwise: R U F Rw Uw Fw S x y z
-        // Moves which are default clockwise: L D B Lw Dw Bw M E
-        const counterclockwiseMoves = ['R', 'U', 'F', 'Rw', 'Uw', 'Fw', 'S', 'x', 'y', 'z'];
-        const direction = this.currentMove.includes("'") 
-            ? (counterclockwiseMoves.includes(mainmovecomponent) ? 1 : -1) 
-            : (counterclockwiseMoves.includes(mainmovecomponent) ? -1 : 1);
-        this.pivot.rotation[axis] = angle * direction;
+        this.pivot.rotation[this.axis] = angle * this.direction;
     
         // Cleanup after animation completes
         if (!this.animating) {
@@ -117,11 +121,16 @@ export const Renderer = {
             // Remove the pivot from the scene
             this.scene.remove(this.pivot);
             this.pivot = null;
+            this.mainmovecomponent = null;
+            this.direction = null;
+            this.axis = null;
 
             // Reset cubies back to their original positions and rotations
             this.rubiksCube.children.forEach((cubie, index) => {
                 cubie.position.copy(this.originalTransforms[index].position);
                 cubie.rotation.copy(this.originalTransforms[index].rotation);
+                cubie.scale.copy(this.originalTransforms[index].scale);
+                cubie.quaternion.copy(this.originalTransforms[index].quaternion);
             });
     
             // Update the state immediately after resetting positions
@@ -149,11 +158,11 @@ export const Renderer = {
             case 'B':
                 return this.rubiksCube.children.filter(cubie => cubie.position.z < -0.9);
             case 'M':
-                return this.rubiksCube.children.filter(cubie => Math.abs(cubie.position.x) < 0.1);
+                return this.rubiksCube.children.filter(cubie => Math.abs(cubie.position.x) < 0.3);
             case 'E':
-                return this.rubiksCube.children.filter(cubie => Math.abs(cubie.position.y) < 0.1);
+                return this.rubiksCube.children.filter(cubie => Math.abs(cubie.position.y) < 0.3);
             case 'S':
-                return this.rubiksCube.children.filter(cubie => Math.abs(cubie.position.z) < 0.1);
+                return this.rubiksCube.children.filter(cubie => Math.abs(cubie.position.z) < 0.3);
             // case for x, y, z shall select all cubies
             case 'x':
             case 'y':
@@ -162,7 +171,7 @@ export const Renderer = {
             case 'Rw':
                 return this.rubiksCube.children.filter(cubie => cubie.position.x > -0.3);
             case 'Lw':
-                return this.rubiksCube.children.filter(cubie => cubie.position.x < +0.3);
+                return this.rubiksCube.children.filter(cubie => cubie.position.x < 0.3);
             case 'Uw':
                 return this.rubiksCube.children.filter(cubie => cubie.position.y > -0.3);
             case 'Dw':
