@@ -75,8 +75,8 @@ export const Renderer = {
             this.scene.add(this.pivot);
     
             // Find all cubies that belong to the right face and add them to the pivot
-            const rightFaceCubies = this.getCubiesToRotate(this.currentMove);
-            rightFaceCubies.forEach(cubie => {
+            const cubiesToRotate = this.getCubiesToRotate(this.currentMove);
+            cubiesToRotate.forEach(cubie => {
                 this.pivot.add(cubie);
             });
         }
@@ -113,7 +113,29 @@ export const Renderer = {
                 return this.rubiksCube.children.filter(cubie => cubie.position.z > 0.9);
             case 'B':
                 return this.rubiksCube.children.filter(cubie => cubie.position.z < -0.9);
-            // Add more cases for wide moves, rotations, and middle slices
+            case 'M':
+                return this.rubiksCube.children.filter(cubie => Math.abs(cubie.position.x) < 0.1);
+            case 'E':
+                return this.rubiksCube.children.filter(cubie => Math.abs(cubie.position.y) < 0.1);
+            case 'S':
+                return this.rubiksCube.children.filter(cubie => Math.abs(cubie.position.z) < 0.1);
+            // case for x, y, z shall select all cubies
+            case 'x':
+            case 'y':
+            case 'z':
+                return [...this.rubiksCube.children];
+            case 'Rw':
+                return this.rubiksCube.children.filter(cubie => cubie.position.x > -0.3);
+            case 'Lw':
+                return this.rubiksCube.children.filter(cubie => cubie.position.x < +0.3);
+            case 'Uw':
+                return this.rubiksCube.children.filter(cubie => cubie.position.y > -0.3);
+            case 'Dw':
+                return this.rubiksCube.children.filter(cubie => cubie.position.y < 0.3);
+            case 'Fw':
+                return this.rubiksCube.children.filter(cubie => cubie.position.z > -0.3);
+            case 'Bw':
+                return this.rubiksCube.children.filter(cubie => cubie.position.z < 0.3);
             default:
                 return [];
         }
@@ -122,30 +144,52 @@ export const Renderer = {
         switch (move) {
             case 'R':
             case 'L':
-                return 1; // Center of the right or left face
+            case 'M':
+            case 'x':
+            case 'Rw':
+            case 'Lw':
+            return 1; // Center of the right, left, middle slice along x-axis, cube for x rotation, wide right, or wide left face
             case 'U':
             case 'D':
-                return 0; // Center of the up or down face
+            case 'E':
+            case 'y':
+            case 'Uw':
+            case 'Dw':
+            return 0; // Center of the up, down, middle slice along y-axis, cube for y rotation, wide up, or wide down face
             case 'F':
             case 'B':
-                return 0; // Center of the front or back face
-            // Add more cases for wide moves, rotations, and middle slices
+            case 'S':
+            case 'z':
+            case 'Fw':
+            case 'Bw':
+            return 0; // Center of the front, back, middle slice along z-axis, cube for z rotation, wide front, or wide back face
             default:
-                return 0;
+            return 0;
         }
     },
     getRotationAxis(move) {
         switch (move) {
             case 'R':
             case 'L':
+            case 'M':
+            case 'x':
+            case 'Rw':
+            case 'Lw':
                 return 'x';
             case 'U':
             case 'D':
+            case 'E':
+            case 'y':
+            case 'Uw':
+            case 'Dw':
                 return 'y';
             case 'F':
             case 'B':
+            case 'S':
+            case 'z':
+            case 'Fw':
+            case 'Bw':
                 return 'z';
-            // Add more cases for wide moves, rotations, and middle slices
             default:
                 return 'x';
         }

@@ -32,7 +32,13 @@ export const EventHandler = {
             }
 
             if (key === ' ') {
-                animateMove('B');
+                const moves = ['R', "L", "U", "D", "F", "B", "Rw", "Lw", "Uw", "Dw", "Fw", "Bw", "M", "E", "S", "x", "y", "z"];
+                if (typeof EventHandler.moveIndex === 'undefined') {
+                    EventHandler.moveIndex = 0; 
+                }
+
+                animateMove(moves[EventHandler.moveIndex]);
+                EventHandler.moveIndex = (EventHandler.moveIndex + 1) % moves.length;
                 return;
             }
         
