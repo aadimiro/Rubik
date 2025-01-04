@@ -55,9 +55,13 @@ export const Renderer = {
         this.animationProgress = 0;
         this.currentMove = move;
         this.animationCallback = callback;
-    
-        // Store the original positions of the cubies
-        this.originalPositions = this.rubiksCube.children.map(cubie => cubie.position.clone());
+
+        // Store the original positions and rotations of the cubies
+        this.originalTransforms = this.rubiksCube.children.map(cubie => ({
+            position: cubie.position.clone(),
+            rotation: cubie.rotation.clone()
+        }));
+
     },
     updateAnimation(delta) {
         if (!this.animating) return;
@@ -114,9 +118,10 @@ export const Renderer = {
             this.scene.remove(this.pivot);
             this.pivot = null;
 
-            // Reset cubies back to their original positions
+            // Reset cubies back to their original positions and rotations
             this.rubiksCube.children.forEach((cubie, index) => {
-            cubie.position.copy(this.originalPositions[index]);
+                cubie.position.copy(this.originalTransforms[index].position);
+                cubie.rotation.copy(this.originalTransforms[index].rotation);
             });
     
             // Update the state immediately after resetting positions
