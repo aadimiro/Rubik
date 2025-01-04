@@ -1,5 +1,5 @@
 export const EventHandler = {
-    init(cube, animateRightFace) {
+    init(cube, animateMove) {
         let counterclockwisePressed = false;
         let widePressed = false;
         
@@ -32,7 +32,7 @@ export const EventHandler = {
             }
 
             if (key === ' ') {
-                animateRightFace();
+                animateMove('B');
                 return;
             }
         

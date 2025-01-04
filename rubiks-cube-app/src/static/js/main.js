@@ -50,7 +50,7 @@ cube.fetchState().then(() => {
 });
 
 // Initialize Event Handlers
-EventHandler.init(cube, () => Renderer.animateRightFace());
+EventHandler.init(cube, Renderer.animateMove.bind(Renderer));
 
 // Render Loop
 let lastTime = performance.now();

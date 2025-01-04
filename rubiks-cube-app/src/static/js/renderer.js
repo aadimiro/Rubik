@@ -49,10 +49,11 @@ export const Renderer = {
             this.logMatrix(matrix);
         }
     },
-    animateRightFace() {
+    animateMove(move) {
         if (this.animating) return;
         this.animating = true;
         this.animationProgress = 0;
+        this.currentMove = move;
     },
     updateAnimation(delta) {
         if (!this.animating) return;
@@ -74,14 +75,15 @@ export const Renderer = {
             this.scene.add(this.pivot);
     
             // Find all cubies that belong to the right face and add them to the pivot
-            const rightFaceCubies = this.rubiksCube.children.filter(cubie => cubie.position.x > 0.9);
+            const rightFaceCubies = this.getCubiesToRotate(this.currentMove);
             rightFaceCubies.forEach(cubie => {
                 this.pivot.add(cubie);
             });
         }
     
         // Apply rotation to the pivot
-        this.pivot.rotation.x = angle;
+        const axis = this.getRotationAxis(this.currentMove);
+        this.pivot.rotation[axis] = angle;
     
         // Cleanup after animation completes
         if (!this.animating) {
@@ -95,6 +97,57 @@ export const Renderer = {
             this.scene.remove(this.pivot);
             this.pivot = null;
     
+        }
+    },
+    getCubiesToRotate(move) {
+        switch (move) {
+            case 'R':
+                return this.rubiksCube.children.filter(cubie => cubie.position.x > 0.9);
+            case 'L':
+                return this.rubiksCube.children.filter(cubie => cubie.position.x < -0.9);
+            case 'U':
+                return this.rubiksCube.children.filter(cubie => cubie.position.y > 0.9);
+            case 'D':
+                return this.rubiksCube.children.filter(cubie => cubie.position.y < -0.9);
+            case 'F':
+                return this.rubiksCube.children.filter(cubie => cubie.position.z > 0.9);
+            case 'B':
+                return this.rubiksCube.children.filter(cubie => cubie.position.z < -0.9);
+            // Add more cases for wide moves, rotations, and middle slices
+            default:
+                return [];
+        }
+    },
+    getPivotPosition(move) {
+        switch (move) {
+            case 'R':
+            case 'L':
+                return 1; // Center of the right or left face
+            case 'U':
+            case 'D':
+                return 0; // Center of the up or down face
+            case 'F':
+            case 'B':
+                return 0; // Center of the front or back face
+            // Add more cases for wide moves, rotations, and middle slices
+            default:
+                return 0;
+        }
+    },
+    getRotationAxis(move) {
+        switch (move) {
+            case 'R':
+            case 'L':
+                return 'x';
+            case 'U':
+            case 'D':
+                return 'y';
+            case 'F':
+            case 'B':
+                return 'z';
+            // Add more cases for wide moves, rotations, and middle slices
+            default:
+                return 'x';
         }
     },    
     isValidMatrix(matrix) {
