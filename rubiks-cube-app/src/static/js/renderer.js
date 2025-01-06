@@ -9,7 +9,7 @@ export const Renderer = {
         this.animating = false;
         this.animationProgress = 0;
     },
-    updateCubeState(state, orientationMatrix) {
+    updateCube(orientationMatrix) {
         // Update cube rendering based on state and orientation
         const colorMap = {
             W: 0xffffff, // White

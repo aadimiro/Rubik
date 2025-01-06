@@ -16,7 +16,7 @@ export class Cube {
         console.log('Fetched state:', this.state);
         console.log('Fetched orientation matrix:', this.orientationMatrix);
         this.saveState();
-        this.render();
+        Renderer.updateCube(this.orientationMatrix);
         if (this.historyIndex > 0) {
             this.updateHint(); // Update hint based on the new state
         }
@@ -32,9 +32,6 @@ export class Cube {
         await this.fetchState(); // Fetch updated state
     }
 
-    render() {
-        Renderer.updateCubeState(this.state, this.orientationMatrix);
-    }
 
     getFaceColors(cubieIndex) {
         const faceColors = ['black', 'black', 'black', 'black', 'black', 'black'];
