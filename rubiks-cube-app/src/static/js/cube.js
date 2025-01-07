@@ -33,31 +33,20 @@ export class Cube {
     }
 
 
-    getFaceColors(cubieIndex) {
+    getFaceColors(x, y, z) {
         const faceColors = ['black', 'black', 'black', 'black', 'black', 'black'];
 
-        // Map cubieIndex to its position on the cube
-        const positions = [];
-        for (let x = -1; x <= 1; x++) {
-            for (let y = -1; y <= 1; y++) {
-                for (let z = -1; z <= 1; z++) {
-                    positions.push({ x, y, z });
-                }
-            }
-        }
-
-        const position = positions[cubieIndex];
-
         // Determine the colors based on the position and state
-        if (position.z === -1) faceColors[5] = this.state.B[(position.y + 1) * 3 + (-position.x + 1)]; // Back face
-        if (position.z === 1) faceColors[4] = this.state.F[(position.y + 1) * 3 + (-position.x + 1)]; // Front face
-        if (position.y === -1) faceColors[3] = this.state.D[(-position.z + 1) * 3 + (position.x + 1)]; // Down face
-        if (position.y === 1) faceColors[2] = this.state.U[(position.z + 1) * 3 + (position.x + 1)]; // Up face
-        if (position.x === -1) faceColors[1] = this.state.L[(position.y + 1) * 3 + (position.z + 1)]; // Left face
-        if (position.x === 1) faceColors[0] = this.state.R[(position.y + 1) * 3 + (-position.z + 1)]; // Right face
+        if (z === -1) faceColors[5] = this.state.B[(y + 1) * 3 + (-x + 1)]; // Back face
+        if (z === 1) faceColors[4] = this.state.F[(y + 1) * 3 + (-x + 1)]; // Front face
+        if (y === -1) faceColors[3] = this.state.D[(-z + 1) * 3 + (x + 1)]; // Down face
+        if (y === 1) faceColors[2] = this.state.U[(z + 1) * 3 + (x + 1)]; // Up face
+        if (x === -1) faceColors[1] = this.state.L[(y + 1) * 3 + (z + 1)]; // Left face
+        if (x === 1) faceColors[0] = this.state.R[(y + 1) * 3 + (-z + 1)]; // Right face
 
         return faceColors;
     }
+
 
     saveState() {
         // Save the current state and orientation

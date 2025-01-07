@@ -23,7 +23,7 @@ export const Renderer = {
         
         // Update the cube faces with the correct colors
         this.rubiksCube.children.forEach((cubie, index) => {
-            const faceColors = this.cube.getFaceColors(index); // Call getFaceColors from Cube instance
+            const faceColors = this.cube.getFaceColors(cubie.position.x, cubie.position.y, cubie.position.z); // Call getFaceColors with x, y, z positions
             cubie.material.forEach((material, i) => {
                 material.color.setHex(colorMap[faceColors[i]]);
             });
@@ -43,7 +43,27 @@ export const Renderer = {
         
         // Validate the matrix before applying
         if (this.isValidMatrix(matrix)) {
-            this.rubiksCube.setRotationFromMatrix(matrix);
+            //this.rubiksCube.setRotationFromMatrix(matrix);
+            // Create a temporary pivot at the origin
+            const tempPivot = new THREE.Object3D();
+            this.scene.add(tempPivot);
+
+            // Transfer cubies to the temporary pivot
+            this.rubiksCube.children.forEach(cubie => {
+                tempPivot.add(cubie);
+            });
+
+            // Apply the orientation matrix to the temporary pivot
+            tempPivot.setRotationFromMatrix(matrix);
+
+            // Transfer cubies back to the rubiksCube
+            while (tempPivot.children.length) {
+                const cubie = tempPivot.children[0];
+                this.rubiksCube.add(cubie);
+            }
+
+            // Remove the temporary pivot from the scene
+            this.scene.remove(tempPivot);
         } else {
             console.error('Invalid orientation matrix:', matrix);
             this.logMatrix(matrix);
@@ -55,9 +75,6 @@ export const Renderer = {
         this.animationProgress = 0;
         this.currentMove = move;
         this.animationCallback = callback;
-
-        this.originalTransforms = this.rubiksCube.children.map(cubie => cubie.matrix.clone());
-
     },
     updateAnimation(delta) {
         if (!this.animating) return;
@@ -73,9 +90,7 @@ export const Renderer = {
         // Calculate the current rotation angle
         const angle = this.animationProgress;
     
-
-
-        // Persistent pivot for the right face
+        // Persistent pivot object to rotate the cubies
         if (!this.pivot) {
             this.pivot = new THREE.Object3D();
             this.scene.add(this.pivot);
@@ -94,8 +109,9 @@ export const Renderer = {
             this.axis = this.getRotationAxis(this.mainmovecomponent);
 
             // Find all cubies that belong to the right face and add them to the pivot
-            const cubiesToRotate = this.getCubiesToRotate(this.mainmovecomponent);
-            cubiesToRotate.forEach(cubie => {
+            this.cubiesToRotate = this.getCubiesToRotate(this.mainmovecomponent);
+ 
+            this.cubiesToRotate.forEach(cubie => {
                 this.pivot.add(cubie);
             });
         }
@@ -120,11 +136,7 @@ export const Renderer = {
             this.axis = null;
 
             
-            // Reset cubies back to their original transformation matrices
-            this.rubiksCube.children.forEach((cubie, index) => {
-                cubie.matrix.copy(this.originalTransforms[index]);
-                cubie.matrix.decompose(cubie.position, cubie.quaternion, cubie.scale);
-            });
+
     
             // Update the state immediately after resetting positions
             this.cube.fetchState().then(() => {
