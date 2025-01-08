@@ -21,13 +21,6 @@ export const Renderer = {
             black: 0x000000
         };
         
-        // Update the cube faces with the correct colors
-        this.rubiksCube.children.forEach((cubie, index) => {
-            const faceColors = this.cube.getFaceColors(cubie.position.x, cubie.position.y, cubie.position.z); // Call getFaceColors with x, y, z positions
-            cubie.material.forEach((material, i) => {
-                material.color.setHex(colorMap[faceColors[i]]);
-            });
-        });
         
         // Convert 3x3 orientation matrix to 4x4 matrix
         const orientationMatrix4x4 = [
@@ -54,7 +47,7 @@ export const Renderer = {
             });
 
             // Apply the orientation matrix to the temporary pivot
-            tempPivot.setRotationFromMatrix(matrix);
+            //tempPivot.setRotationFromMatrix(matrix);
 
             // Transfer cubies back to the rubiksCube
             while (tempPivot.children.length) {
@@ -68,6 +61,16 @@ export const Renderer = {
             console.error('Invalid orientation matrix:', matrix);
             this.logMatrix(matrix);
         }
+
+        // Update the cube faces with the correct colors
+        this.rubiksCube.children.forEach((cubie, index) => {
+            const faceColors = this.cube.getFaceColors(cubie.position.x, cubie.position.y, cubie.position.z); // Call getFaceColors with x, y, z positions
+            cubie.material.forEach((material, i) => {
+                material.color.setHex(colorMap[faceColors[i]]);
+            });
+        });
+
+
     },
     animateMove(move, callback) {
         if (this.animating) return;

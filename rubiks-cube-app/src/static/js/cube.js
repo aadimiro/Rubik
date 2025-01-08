@@ -36,13 +36,42 @@ export class Cube {
     getFaceColors(x, y, z) {
         const faceColors = ['black', 'black', 'black', 'black', 'black', 'black'];
 
+        // Determine the real face (U, D, F, B, L, R) which is at corresponding side depending on the orientation
+        const orientation = this.orientationMatrix;
+
+        // Determine the real faces based on the orientation matrix
+        const realR = orientation[0][0] === 1 ? 'R' : orientation[0][0] === -1 ? 'L' :
+                    orientation[0][1] === 1 ? 'D' : orientation[0][1] === -1 ? 'U' :
+                    orientation[0][2] === 1 ? 'B' : 'F';
+
+        const realU = orientation[1][0] === 1 ? 'L' : orientation[1][0] === -1 ? 'R' :
+                    orientation[1][1] === 1 ? 'U' : orientation[1][1] === -1 ? 'D' :
+                    orientation[1][2] === 1 ? 'B' : 'F';
+
+        const realF = orientation[2][0] === 1 ? 'L' : orientation[2][0] === -1 ? 'R' :
+                    orientation[2][1] === 1 ? 'D' : orientation[2][1] === -1 ? 'U' :
+                    orientation[2][2] === 1 ? 'F' : 'B';
+
+        // Determine the opposite faces
+        const realL = realR === 'R' ? 'L' : realR === 'L' ? 'R' :
+                    realR === 'U' ? 'D' : realR === 'D' ? 'U' :
+                    realR === 'F' ? 'B' : 'F';
+
+        const realD = realU === 'U' ? 'D' : realU === 'D' ? 'U' :
+                    realU === 'R' ? 'L' : realU === 'L' ? 'R' :
+                    realU === 'F' ? 'B' : 'F';
+
+        const realB = realF === 'F' ? 'B' : realF === 'B' ? 'F' :
+                    realF === 'R' ? 'L' : realF === 'L' ? 'R' :
+                    realF === 'U' ? 'D' : 'U';
+        
         // Determine the colors based on the position and state
-        if (z === -1) faceColors[5] = this.state.B[(y + 1) * 3 + (-x + 1)]; // Back face
-        if (z === 1) faceColors[4] = this.state.F[(y + 1) * 3 + (-x + 1)]; // Front face
-        if (y === -1) faceColors[3] = this.state.D[(-z + 1) * 3 + (x + 1)]; // Down face
-        if (y === 1) faceColors[2] = this.state.U[(z + 1) * 3 + (x + 1)]; // Up face
-        if (x === -1) faceColors[1] = this.state.L[(y + 1) * 3 + (z + 1)]; // Left face
-        if (x === 1) faceColors[0] = this.state.R[(y + 1) * 3 + (-z + 1)]; // Right face
+        if (z === -1) faceColors[5] = this.state[realB][(y + 1) * 3 + (-x + 1)]; // Back face
+        if (z === 1) faceColors[4] = this.state[realF][(y + 1) * 3 + (-x + 1)]; // Front face
+        if (y === -1) faceColors[3] = this.state[realD][(-z + 1) * 3 + (x + 1)]; // Down face
+        if (y === 1) faceColors[2] = this.state[realU][(z + 1) * 3 + (x + 1)]; // Up face
+        if (x === -1) faceColors[1] = this.state[realL][(y + 1) * 3 + (z + 1)]; // Left face
+        if (x === 1) faceColors[0] = this.state[realR][(y + 1) * 3 + (-z + 1)]; // Right face
 
         return faceColors;
     }
