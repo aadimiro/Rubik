@@ -1,16 +1,13 @@
 import sys
 import os
 from flask import Flask, render_template, jsonify, request, session
-from flask_session import Session
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 from cube.cube import Cube
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'
-app.config['SESSION_TYPE'] = 'filesystem'  # Store sessions in the filesystem
-Session(app)
+app.config['SECRET_KEY'] = 'your_secret_key'  # Ensure you have a secret key for secure cookies
 
 def get_user_cube():
     if 'cube' not in session:
