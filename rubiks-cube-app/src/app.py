@@ -1,14 +1,26 @@
 import sys
 import os
-
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, session
+from flask_session import Session
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 from cube.cube import Cube
 
 app = Flask(__name__)
-cube = Cube()
+app.config['SECRET_KEY'] = 'your_secret_key'
+app.config['SESSION_TYPE'] = 'filesystem'  # Store sessions in the filesystem
+Session(app)
+
+def get_user_cube():
+    if 'cube' not in session:
+        session['cube'] = Cube().get_state()
+    cube = Cube()
+    cube.set_state(session['cube'])
+    return cube
+
+def save_user_cube(cube):
+    session['cube'] = cube.get_state()
 
 @app.route('/')
 def index():
@@ -16,8 +28,8 @@ def index():
 
 @app.route('/cube/state', methods=['GET'])
 def get_cube_state():
+    cube = get_user_cube()
     return jsonify(cube.get_state())
-
 
 @app.route('/cube/set-state', methods=['POST'])
 def set_cube_state():
@@ -26,7 +38,9 @@ def set_cube_state():
         'state': data['state'],
         'orientation': data['orientation']
     }
+    cube = get_user_cube()
     cube.set_state(state)
+    save_user_cube(cube)
     return jsonify(success=True)
 
 @app.route('/cube/key-press', methods=['POST'])
@@ -37,6 +51,8 @@ def handle_key_press():
         counterclockwise_pressed = data.get('counterclockwise', False)
         wide_pressed = data.get('wide', False)
         print(f"Received key: {key}, counterclockwise: {counterclockwise_pressed}, wide: {wide_pressed}")  # Debugging
+
+        cube = get_user_cube()
 
         if key in ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', '8', '2', '4', '6', '3', '7', '9', '1']:
             axis, direction = cube.get_axis_and_direction(key)
@@ -56,6 +72,7 @@ def handle_key_press():
         else:
             raise ValueError("Invalid key")
 
+        save_user_cube(cube)
         return jsonify(success=True, state=cube.get_state())
     except ValueError as ve:
         print(f"ValueError: {ve}")
@@ -67,7 +84,9 @@ def handle_key_press():
 @app.route('/cube/shuffle', methods=['POST'])
 def shuffle_cube():
     try:
+        cube = get_user_cube()
         shuffle_sequence = cube.shuffle()
+        save_user_cube(cube)
         return jsonify(success=True, sequence=shuffle_sequence, state=cube.get_state())
     except Exception as e:
         print(f"Error shuffling cube: {e}")
@@ -78,13 +97,17 @@ def rotate_cube():
     data = request.get_json()
     axis = data['axis']
     direction = data['direction']
+    cube = get_user_cube()
     cube.rotate(axis, direction)
+    save_user_cube(cube)
     return jsonify(success=True, state=cube.get_state())
 
 @app.route('/cube/setsolved', methods=['POST'])
 def setsolved():
     try:
+        cube = get_user_cube()
         cube.initialize_cube()     # Call the method you want to execute
+        save_user_cube(cube)
         return jsonify(success=True, state=cube.get_state())
     except Exception as e:
         print(f"Error executing Set Solved: {e}")
@@ -93,7 +116,9 @@ def setsolved():
 def execute_move_sequence(sequence):
     try:
         print(f"Executing sequence: {sequence}")  # Debugging
+        cube = get_user_cube()
         cube.move_sequence(sequence)
+        save_user_cube(cube)
         return jsonify(success=True, state=cube.get_state())
     except ValueError as ve:
         print(f"ValueError: {ve}")

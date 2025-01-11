@@ -1,3 +1,4 @@
 /rubikvenv
 /rubikvenv312
 rubiks-cube-app/src/cube/__pycache__/
+/flask_session
