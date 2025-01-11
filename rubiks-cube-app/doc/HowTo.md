@@ -1,3 +1,5 @@
+[English Version](./HowTo.md) | [German Version](./HowTo_DE.md) | [Spanish Version](./HowTo_ES.md) | [Chinese Version](./HowTo_CN.md)
+
 # How to Use the Rubik's Cube Application
 
 Welcome to the Rubik's Cube application! This guide will help you understand how to use the application to solve a Rubik's Cube.
