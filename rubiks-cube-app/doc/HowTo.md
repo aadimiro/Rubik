@@ -56,7 +56,7 @@ Here are the more complex moves you can perform using the buttons in the applica
 - **Rotate Corner Right**: `R U2 R' U'`
 - **Insert Corner Left**: `L' U' L`
 - **Insert Corner Right**: `R U R'`
-- **Auto Move Left**: `U' L' U L U F U' F''`
+- **Auto Move Left**: `U' L' U L U F U' F'`
 - **Auto Move Right**: `U R U' R' U' F' U F`
 - **Line to Fish**: `F R U R' U' F'`
 - **Corner to Fish**: `Fw R U R' U' Fw'`
@@ -70,47 +70,72 @@ Here are the more complex moves you can perform using the buttons in the applica
 You only need simple moves for this.
 
 #### Intended Result:
+|||
+|--------|-------|
+|![White Cross Side 1](whitecrossside1.png) |![White Cross Side 2](whitecrossside2.png)|
 
-![White Cross Side 1](whitecrossside1.png) 
-![White Cross Side 2](whitecrossside2.png)
+
+
 
 ### Complete the First Layer
+
+Hint: Turn the cube with the yellow central piece to the top face.
+
 #### Step 1 - Insert the Corners
+
+* We want to insert the right edge pieces from the top layer to the right bottom corner.
+* For this place the corresponding piece in the corresponding corner on the top layer.
+* If the corner has the white face on top, we need to rotate the corner with the corresponding move (either on left or right side).
+* Finally you can insert the corner from top to bottom layer.
+
 ##### Example - Rotate Corner Right
+R U2 R' U'
 | Before | After |
 |--------|-------|
 | ![Rotate Corner Right](RotateCornerRight.png) | ![Rotate Corner Right Result](RotateCornerRightResult.png) |
 
+
 ##### Example - Rotate Corner Left
+L' U2 L U
 | Before | After |
 |--------|-------|
 | ![Rotate Corner Left](RotateCornerLeft.png) | ![Rotate Corner Left Result](RotateCornerLeftResult.png) |
 
 ##### Example - Insert Corner Right
+R U R'
 | Before | After |
 |--------|-------|
 | ![Insert Corner Right](InsertCornerRight.png) | ![Insert Corner Right Result](InsertCornerRightResult.png) |
 
 ##### Example - Insert Corner Left
+L' U' L
 | Before | After |
 |--------|-------|
 | ![Insert Corner Left](InsertCornerLeft.png) | ![Insert Corner Left Result](InsertCornerLeftResult.png) |
 
 #### Step 2 - Insert Edges with Auto Move
+* We want to insert edges on the top layer to the right place on the second layer.
+* Place the corresponding edge on the right face to be introduced
+* Then do the Auto Move (either left or right) to insert the corner.
+* If your edge is not in the top layer, but in the second, you need to bring it first to the top layer by inserting any other edge in its place with the Auto Move.
 ##### Example - Insert Edge Right
+U R U' R' U' F' U F (Auto Move Right)
 | Before | After |
 |--------|-------|
 | ![Insert Edge Right](AutoMoveRight.png) | ![Insert Edge Right Result](AutoMoveRightResult.png) |
 
 ##### Example - Insert Edge Left
+U' L' U L U F U' F' (Auto Move Left)
 | Before | After |
 |--------|-------|
 | ![Insert Edge Left](AutoMoveLeft.png) | ![Insert Edge Left Result](AutoMoveLeftResult.png) |
 
 #### Intended Result:
 
-![First Two Layers](FirstTwoLayerside1.png)
-![First Two Layers](FirstTwoLayerside2.png)
+|||
+|--------|-------|
+|![First Two Layers](FirstTwoLayerside1.png)|![First Two Layers](FirstTwoLayerside2.png)|
+
 
 ### Solve the Last Layer
 #### Step 1 - Line or Corner to Fish
