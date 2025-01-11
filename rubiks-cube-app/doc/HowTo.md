@@ -2,6 +2,8 @@
 
 Welcome to the Rubik's Cube application! This guide will help you understand how to use the application to solve a Rubik's Cube.
 
+Try the app online: [Rubik's Cube Web Application](https://rubiks-cube-app-omega.vercel.app/)
+
 ## Getting Started
 
 1. **Open the Application**: Navigate to the application URL in your web browser.
