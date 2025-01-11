@@ -94,7 +94,7 @@ Hint: Turn the cube with the yellow central piece to the top face.
 
 #### Step 1 - Insert the Corners
 
-* We want to insert the right edge pieces from the top layer to the right bottom corner.
+* We want to insert the correct edge pieces from the top layer to the correct bottom corner.
 * For this, place the corresponding piece in the corresponding corner on the top layer.
 * If the corner has the white face on top, we need to rotate the corner with the corresponding move (either on the left or right side).
 * Finally, you can insert the corner from the top to the bottom layer.

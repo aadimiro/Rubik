@@ -94,7 +94,7 @@ Hinweis: Drehen Sie den Würfel mit dem gelben Mittelstück nach oben.
 
 #### Schritt 1 - Die Ecken einfügen
 
-* Wir möchten die richtigen Kantenstücke von der oberen Schicht in die rechte untere Ecke einfügen.
+* Wir möchten die richtigen Kantenstücke von der oberen Schicht in die richtige untere Ecke einfügen.
 * Platzieren Sie dazu das entsprechende Stück in der entsprechenden Ecke auf der oberen Schicht.
 * Wenn die Ecke die weiße Fläche oben hat, müssen wir die Ecke mit dem entsprechenden Zug drehen (entweder auf der linken oder rechten Seite).
 * Schließlich können Sie die Ecke von oben in die untere Schicht einfügen.

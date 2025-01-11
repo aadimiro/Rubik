@@ -94,7 +94,7 @@ Pista: Gira el cubo con la pieza central amarilla hacia la cara superior.
 
 #### Paso 1 - Insertar las esquinas
 
-* Queremos insertar las piezas de borde correctas de la capa superior en la esquina inferior derecha.
+* Queremos insertar las piezas de borde correctas de la capa superior en la esquina inferior correcta.
 * Para esto, coloca la pieza correspondiente en la esquina correspondiente en la capa superior.
 * Si la esquina tiene la cara blanca en la parte superior, necesitamos girar la esquina con el movimiento correspondiente (ya sea en el lado izquierdo o derecho).
 * Finalmente, puedes insertar la esquina de la parte superior a la capa inferior.
