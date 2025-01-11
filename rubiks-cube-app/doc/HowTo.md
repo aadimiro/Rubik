@@ -36,6 +36,10 @@ Try the app online: [Rubik's Cube Web Application](https://rubiks-cube-app-omega
   - `F` (Front face)
   - `B` (Back face)
   - `D` (Down face)
+  - **Slice Moves**: Rotate the entire cube.
+  - `M` (Slice x)
+  - `E` (Slice y)
+  - `S` (Slice z)
 - **Modifiers** (hold while rotating faces):
   - `'` or `#`: Rotate counterclockwise.
   - `w`: Rotate wide.
