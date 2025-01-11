@@ -16,7 +16,7 @@ Try the app online: [Rubik's Cube Web Application](https://rubiks-cube-app-omega
 - **Execute Sequence Button**: Enter a sequence of moves in the text field and click this button to execute them.
 - **Set Solved Button**: Resets the cube to the solved state.
 - **Hint Text**: Displays hints to guide you through solving the cube based on its current state.
-- **Single Move Buttons**: To make moves in mobile devices without keyboard.
+- **Single Move Buttons**: To make moves on mobile devices without a keyboard.
 
 ## Controls
 
@@ -36,7 +36,7 @@ Try the app online: [Rubik's Cube Web Application](https://rubiks-cube-app-omega
   - `F` (Front face)
   - `B` (Back face)
   - `D` (Down face)
-- **Modifiers** (keep hold while rotating faces):
+- **Modifiers** (hold while rotating faces):
   - `'` or `#`: Rotate counterclockwise.
   - `w`: Rotate wide.
 
@@ -56,7 +56,7 @@ The application provides hints to guide you through solving the cube:
 3. **Complete the First Two Layers**: After completing the first layer, the hint will guide you to complete the first two layers.
 4. **Solve the Cube**: Finally, the hint will guide you to solve the entire cube.
 
-### More complex moves
+### More Complex Moves
 
 Here are the more complex moves you can perform using the buttons in the application:
 
@@ -82,9 +82,6 @@ You only need simple moves for this.
 |--------|-------|
 |![White Cross Side 1](whitecrossside1.png) |![White Cross Side 2](whitecrossside2.png)|
 
-
-
-
 ### Complete the First Layer
 
 Hint: Turn the cube with the yellow central piece to the top face.
@@ -92,16 +89,15 @@ Hint: Turn the cube with the yellow central piece to the top face.
 #### Step 1 - Insert the Corners
 
 * We want to insert the right edge pieces from the top layer to the right bottom corner.
-* For this place the corresponding piece in the corresponding corner on the top layer.
-* If the corner has the white face on top, we need to rotate the corner with the corresponding move (either on left or right side).
-* Finally you can insert the corner from top to bottom layer.
+* For this, place the corresponding piece in the corresponding corner on the top layer.
+* If the corner has the white face on top, we need to rotate the corner with the corresponding move (either on the left or right side).
+* Finally, you can insert the corner from the top to the bottom layer.
 
 ##### Example - Rotate Corner Right
 R U2 R' U'
 | Before | After |
 |--------|-------|
 | ![Rotate Corner Right](RotateCornerRight.png) | ![Rotate Corner Right Result](RotateCornerRightResult.png) |
-
 
 ##### Example - Rotate Corner Left
 L' U2 L U
@@ -123,9 +119,10 @@ L' U' L
 
 #### Step 2 - Insert Edges with Auto Move
 * We want to insert edges on the top layer to the right place on the second layer.
-* Place the corresponding edge on the right face to be introduced
+* Place the corresponding edge on the right face to be introduced.
 * Then do the Auto Move (either left or right) to insert the corner.
 * If your edge is not in the top layer, but in the second, you need to bring it first to the top layer by inserting any other edge in its place with the Auto Move.
+
 ##### Example - Insert Edge Right
 U R U' R' U' F' U F (Auto Move Right)
 | Before | After |
@@ -143,7 +140,6 @@ U' L' U L U F U' F' (Auto Move Left)
 |||
 |--------|-------|
 |![First Two Layers](FirstTwoLayerside1.png)|![First Two Layers](FirstTwoLayerside2.png)|
-
 
 ### Solve the Last Layer
 #### Step 1 - Line or Corner to Fish
@@ -196,6 +192,7 @@ R U R' U R U2 R' (Fish To Yellow)
 * a) Rotate the upper layer to have one edge in the right position.
 * b) Use the **Rotate 3 Edges** move to rotate the remaining edges in a clockwise direction. 
 * Depending on how the edges are initially, you may need to repeat the procedure (a and b).
+
 ##### Example - Rotate 3 Edges
 (The well-oriented edge must be at the front, as in the picture)
 
