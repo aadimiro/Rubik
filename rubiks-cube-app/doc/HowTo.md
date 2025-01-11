@@ -14,13 +14,19 @@ Welcome to the Rubik's Cube application! This guide will help you understand how
 - **Execute Sequence Button**: Enter a sequence of moves in the text field and click this button to execute them.
 - **Set Solved Button**: Resets the cube to the solved state.
 - **Hint Text**: Displays hints to guide you through solving the cube based on its current state.
-- **Cube Canvas**: The 3D representation of the Rubik's Cube where you can see your moves in action.
+- **Single Move Buttons**: To make moves in mobile devices without keyboard.
 
 ## Controls
 
 ### Keyboard Shortcuts
 
-- **Arrow Keys**: Rotate the entire cube.
+- **NumPad numbers**: Rotate the entire cube.
+  - `1` (x)
+  - `9` (x')
+  - `6` (y)
+  - `4` (y')
+  - `7` (z)
+  - `3` (z')
 - **Face Rotations**: Use the following keys to rotate specific faces:
   - `U` (Up face)
   - `R` (Right face)
@@ -28,7 +34,7 @@ Welcome to the Rubik's Cube application! This guide will help you understand how
   - `F` (Front face)
   - `B` (Back face)
   - `D` (Down face)
-- **Modifiers**:
+- **Modifiers** (keep hold while rotating faces):
   - `'` or `#`: Rotate counterclockwise.
   - `w`: Rotate wide.
 
@@ -143,12 +149,16 @@ Hint: If you don't have a line or corner (i.e., you have only a dot), just make 
 
 ##### Example - Line to Fish
 (The line must be central and horizontal, as in the picture)
+
+F R U R' U' F' (Line to Fish)
 | Before | After |
 |--------|-------|
 | ![Line to Fish](LineToFish.png) | ![Line to Fish Result](LineToFishResult.png) |
 
 ##### Example - Corner to Fish
 (The corner must be in the front-right, as in the picture)
+
+Fw R U R' U' Fw' (Corner to Fish)
 | Before | After |
 |--------|-------|
 | ![Corner to Fish](CornerToFish.png) | ![Corner to Fish Result](CornerToFishResult.png) |
@@ -175,6 +185,7 @@ Hint: If you don't have a line or corner (i.e., you have only a dot), just make 
 | ![Fish Type 6](FishType6.png) | |
 
 ##### Example - Fish Type 1a to Yellow Last Layer
+R U R' U R U2 R' (Fish To Yellow)
 | Before | After |
 |--------|-------|
 | ![Fish Type 1a](FishToYellow.png) | ![Fish Type 1a to Yellow Result](FishType1aToYellowResult.png) |
@@ -185,6 +196,8 @@ Hint: If you don't have a line or corner (i.e., you have only a dot), just make 
 * Depending on how the edges are initially, you may need to repeat the procedure (a and b).
 ##### Example - Rotate 3 Edges
 (The well-oriented edge must be at the front, as in the picture)
+
+R' U R' U' R' U' R' U R U R2 (Rotate 3 Edges)
 | Before | After |
 |--------|-------|
 | ![Rotate 3 Edges](Rotate3Edges.png) | ![Rotate 3 Edges Result](Rotate3EdgesResult.png) |
@@ -199,6 +212,8 @@ Hint: If you don't have a line or corner (i.e., you have only a dot), just make 
 
 ##### Example - Rotate 3 Corners
 (The well-oriented corner must be at front-left-up, as in the picture)
+
+R U' R D2 R' U R D2 R2 (Rotate 3 Corners)
 | Before | After |
 |--------|-------|
 | ![Rotate 3 Corners](Rotate3Corners.png) | ![Rotate 3 Corners Result](Rotate3CornersResult.png) |
