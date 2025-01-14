@@ -1,5 +1,5 @@
 export const EventHandler = {
-    init(cube) {
+    init(cube, animateMove) {
         let counterclockwisePressed = false;
         let widePressed = false;
         
@@ -28,6 +28,17 @@ export const EventHandler = {
 
             if (key === 'y' && (event.ctrlKey || event.metaKey)) {
                 cube.redo();
+                return;
+            }
+
+            if (key === ' ') {
+                const moves = ["R", "L", "U", "D", "F", "B", "Rw", "Lw", "Uw", "Dw", "Fw", "Bw", "M", "E", "S", "x", "y", "z", "R2", "L2", "U2", "D2", "F2", "B2", "Rw2", "Lw2", "Uw2", "Dw2", "Fw2", "Bw2", "M2", "E2", "S2", "x2", "y2", "z2"];
+                if (typeof EventHandler.moveIndex === 'undefined') {
+                    EventHandler.moveIndex = 0; 
+                }
+
+                animateMove(moves[EventHandler.moveIndex]);
+                EventHandler.moveIndex = (EventHandler.moveIndex + 1) % moves.length;
                 return;
             }
         
@@ -63,9 +74,9 @@ export const EventHandler = {
         });
         
         // Add button click listeners
-        this.setupButtons(cube);
+        this.setupButtons(cube,animateMove);
     },
-    setupButtons(cube) {
+    setupButtons(cube,animateMove) {
         // Reusable function to handle button click events
         function handleButtonClick(buttonId, endpoint, successMessage, getPayload = null) {
             document.getElementById(buttonId).addEventListener('click', function() {
@@ -77,7 +88,12 @@ export const EventHandler = {
                     },
                     body: JSON.stringify(payload),
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.success) {
                         console.log(successMessage);
@@ -89,6 +105,46 @@ export const EventHandler = {
                 .catch((error) => {
                     console.error('Error:', error);
                 });
+            });
+        }
+
+        // Function to handle the sequence of moves
+        function handleSequenceButtonClick(buttonId, endpoint, successMessage) {
+            document.getElementById(buttonId).addEventListener('click', function() {
+                let sequence = document.getElementById('sequenceInput').value.split(' ');
+                sequence = sequence.flatMap(move => move.endsWith('2') ? [move[0], move[0]] : [move]);
+        
+                const executeMove = (index) => {
+                    if (index >= sequence.length) return; // End of sequence
+        
+                    const move = sequence[index];
+                    fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ sequence: move }),
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            console.log(`Executed move: ${move}`);
+                            animateMove(move, () => executeMove(index + 1)); // Animate the move and trigger the next move
+                        } else {
+                            console.error('Error:', data.error);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+                };
+        
+                executeMove(0); // Start the sequence
             });
         }
 
@@ -107,10 +163,9 @@ export const EventHandler = {
         handleButtonClick('Rotate3Edges', '/cube/rotate3edges', 'Rotate 3 Edges executed');
         handleButtonClick('Rotate3Corners', '/cube/rotate3corners', 'Rotate 3 Corners executed');
 
-        // Use the reusable function for the "Execute Sequence" button with a payload
-        handleButtonClick('executeButton', '/cube/execute-sequence', 'Executed sequence', () => {
-            return { sequence: document.getElementById('sequenceInput').value };
-        });
+        // Use the new function for the "Execute Sequence" button
+        handleSequenceButtonClick('executeButton', '/cube/execute-sequence', 'Executed sequence');
+
         handleButtonClick('RotateU', '/cube/execute-sequence', 'Executed sequence', () => {
             return { sequence: "U" };
         });

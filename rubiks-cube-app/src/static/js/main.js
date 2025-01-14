@@ -50,10 +50,15 @@ cube.fetchState().then(() => {
 });
 
 // Initialize Event Handlers
-EventHandler.init(cube);
+EventHandler.init(cube, Renderer.animateMove.bind(Renderer));
+
 
 // Render Loop
-function animate() {
+let lastTime = performance.now();
+function animate(time) {
     requestAnimationFrame(animate);
+    const delta = (time - lastTime) / 1000; // Time in seconds since last frame
+    lastTime = time;
+    Renderer.updateAnimation(delta);
     renderer.render(scene, camera);
 }
