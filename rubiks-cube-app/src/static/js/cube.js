@@ -16,7 +16,7 @@ export class Cube {
         console.log('Fetched state:', this.state);
         console.log('Fetched orientation matrix:', this.orientationMatrix);
         this.saveState();
-        Renderer.updateCube(this.orientationMatrix);
+        Renderer.updateCube();
         if (this.historyIndex > 0) {
             this.updateHint(); // Update hint based on the new state
         }

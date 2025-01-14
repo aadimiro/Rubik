@@ -9,7 +9,7 @@ export const Renderer = {
         this.animating = false;
         this.animationProgress = 0;
     },
-    updateCube(orientationMatrix) {
+    updateCube() {
         // Update cube rendering based on state and orientation
         const colorMap = {
             W: 0xffffff, // White
@@ -20,47 +20,6 @@ export const Renderer = {
             R: 0xff0000,  // Red
             black: 0x000000
         };
-        
-        
-        // Convert 3x3 orientation matrix to 4x4 matrix
-        const orientationMatrix4x4 = [
-            ...orientationMatrix[0], 0,
-            ...orientationMatrix[1], 0,
-            ...orientationMatrix[2], 0,
-            0, 0, 0, 1
-        ];
-        
-        // Apply the orientation matrix to the cube
-        const matrix = new THREE.Matrix4().fromArray(orientationMatrix4x4);
-        console.log('Applying orientation matrix:', matrix);
-        
-        // Validate the matrix before applying
-        if (this.isValidMatrix(matrix)) {
-            //this.rubiksCube.setRotationFromMatrix(matrix);
-            // Create a temporary pivot at the origin
-            const tempPivot = new THREE.Object3D();
-            this.scene.add(tempPivot);
-
-            // Transfer cubies to the temporary pivot
-            this.rubiksCube.children.forEach(cubie => {
-                tempPivot.add(cubie);
-            });
-
-            // Apply the orientation matrix to the temporary pivot
-            //tempPivot.setRotationFromMatrix(matrix);
-
-            // Transfer cubies back to the rubiksCube
-            while (tempPivot.children.length) {
-                const cubie = tempPivot.children[0];
-                this.rubiksCube.add(cubie);
-            }
-
-            // Remove the temporary pivot from the scene
-            this.scene.remove(tempPivot);
-        } else {
-            console.error('Invalid orientation matrix:', matrix);
-            this.logMatrix(matrix);
-        }
 
         // Update the cube faces with the correct colors
         this.rubiksCube.children.forEach((cubie, index) => {
